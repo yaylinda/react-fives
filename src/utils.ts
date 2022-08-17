@@ -1,5 +1,8 @@
 import { MoveDirection } from "./types";
 
+export const NUM_ROWS = 5;
+export const NUM_COLS = 5;
+
 /**
  *
  * @param code
@@ -20,4 +23,10 @@ export const convertKeyCodeToDirection = (
     default:
       return null;
   }
+};
+
+export const initBoard = () => {
+  return Array.from(Array(NUM_ROWS)).map((_, r) =>
+    Array.from(Array(NUM_COLS)).map((_, c) => ({ value: null }))
+  );
 };

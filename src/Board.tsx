@@ -1,14 +1,16 @@
 import "./Board.css";
-
-const NUM_ROWS = 5;
-const NUM_COLS = 5;
+import useGameStore from "./gameStore";
 
 function Board() {
+  const { board } = useGameStore();
+
+  console.log(`[Board] board=${JSON.stringify(board)}`);
+
   return (
     <div className="board">
-      {Array.from(Array(NUM_ROWS)).map((_, r) => (
+      {board.map((row, r) => (
         <div key={`row_${r}`} className="row">
-          {Array.from(Array(NUM_COLS)).map((_, c) => (
+          {row.map((_, c) => (
             <div key={`row_${r}_col_${c}`} className="cell"></div>
           ))}
         </div>

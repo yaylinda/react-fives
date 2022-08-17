@@ -4,3 +4,7 @@ export enum MoveDirection {
   LEFT = "LEFT",
   RIGHT = "RIGHT",
 }
+
+export interface CellData {
+  value: number | null;
+}

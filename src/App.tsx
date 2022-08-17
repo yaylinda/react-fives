@@ -4,12 +4,17 @@ import { useThrottledCallback } from "use-debounce";
 import { useEffect } from "react";
 import useGameStore from "./gameStore";
 import { convertKeyCodeToDirection } from "./utils";
+import Button from "@mui/material/Button";
 
 const ANIMATION_DURATION = 250;
 
 function App() {
-  const { move } = useGameStore();
+  const { hasStarted, move, newGame } = useGameStore();
 
+  /**
+   *
+   * @param e
+   */
   const handleKeyDown = (e: KeyboardEvent) => {
     e.preventDefault(); // disables page scrolling with keyboard arrows
     const dir = convertKeyCodeToDirection(e.code);
@@ -18,12 +23,18 @@ function App() {
     }
   };
 
+  /**
+   *
+   */
   const throttledHandleKeyDown = useThrottledCallback(
     handleKeyDown,
     ANIMATION_DURATION,
     { leading: true, trailing: false }
   );
 
+  /**
+   *
+   */
   useEffect(() => {
     window.addEventListener("keydown", throttledHandleKeyDown);
 
@@ -35,6 +46,11 @@ function App() {
   return (
     <div className="app">
       <Board />
+      {!hasStarted && (
+        <Button variant="contained" color="success" onClick={newGame}>
+          New Game
+        </Button>
+      )}
     </div>
   );
 }
