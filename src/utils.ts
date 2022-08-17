@@ -1,5 +1,10 @@
 import { MoveDirection } from "./types";
 
+/**
+ *
+ * @param code
+ * @returns
+ */
 export const convertKeyCodeToDirection = (
   code: string
 ): MoveDirection | null => {
