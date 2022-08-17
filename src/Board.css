@@ -1,0 +1,16 @@
+.board {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.boardSpot {
+    height: 50px;
+    width: 50px;
+    background-color:honeydew;
+    border-radius: 50%;
+}
