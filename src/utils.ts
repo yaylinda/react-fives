@@ -157,7 +157,11 @@ const getRandomIndex = (values: number[]) => {
 export const moveOnBoard = (
   board: CellData[][],
   dir: MoveDirection
-): { board: CellData[][]; score: number } => {
+): {
+  board: CellData[][];
+  merged: { [key in number]: number };
+  score: number;
+} => {
   const intermediateBoard: IntermediateCellData[][] = Array.from(
     Array(NUM_ROWS)
   ).map((_, r) => Array.from(Array(NUM_COLS)).map((_, c) => ({ values: [] })));
@@ -256,6 +260,7 @@ export const moveOnBoard = (
   console.log(`intermediateBoard=${JSON.stringify(intermediateBoard)}`);
 
   let moveScore = 0;
+  const merged: { [key in number]: number } = {};
   const newBoard = initBoard();
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
@@ -268,11 +273,15 @@ export const moveOnBoard = (
 
       if (filteredValues.length > 1) {
         moveScore += cellTotal;
+        if (!merged[cellTotal]) {
+          merged[cellTotal] = 0;
+        }
+        merged[cellTotal] = merged[cellTotal] + 1;
       }
     }
   }
 
-  return { board: newBoard, score: moveScore };
+  return { board: newBoard, merged, score: moveScore };
 };
 
 /**

@@ -45,6 +45,8 @@ function App() {
     showGameOverDialog,
     moves,
     score,
+    merged,
+    generated,
     move,
     newGame,
     closeGameOverDialog,
@@ -125,6 +127,8 @@ function App() {
             <DialogContentText id="alert-dialog-slide-description">
               <Typography>Score: {score}</Typography>
               <Typography>Moves: {moves}</Typography>
+              <Typography>Merged: {JSON.stringify(merged)}</Typography>
+              <Typography>Generated: {JSON.stringify(generated)}</Typography>
             </DialogContentText>
           </DialogContent>
           <DialogActions>

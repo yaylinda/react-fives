@@ -17,6 +17,8 @@ export interface GameState {
   showGameOverDialog: boolean;
   score: number;
   moves: number;
+  merged: { [key in number]: number };
+  generated: { [key in number]: number };
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
@@ -29,6 +31,8 @@ const useGameStore = create<GameState>()((set) => ({
   showGameOverDialog: false,
   score: 0,
   moves: 0,
+  merged: {},
+  generated: {},
 
   /**
    *
@@ -44,16 +48,30 @@ const useGameStore = create<GameState>()((set) => ({
 
       console.log(`[gameStore][move] direction: ${dir}`);
 
-      const { board, score } = moveOnBoard(state.board, dir);
+      const { board, merged, score } = moveOnBoard(state.board, dir);
 
       let moves = state.moves;
       const coords = getCoordinatesForNewCell(board, dir);
       if (coords != null) {
-        board[coords.row][coords.col] = { value: randomCellValue() };
+        const newValue = randomCellValue();
+        board[coords.row][coords.col] = { value: newValue };
+
+        if (!state.generated[newValue]) {
+          state.generated[newValue] = 0;
+        }
+        state.generated[newValue] = state.generated[newValue] + 1;
+
         moves = moves + 1;
       }
 
       const gameOver = isGameOver(board);
+
+      for (let key in merged) {
+        if (!state.merged[key]) {
+          state.merged[key] = 0;
+        }
+        state.merged[key] = state.merged[key] + merged[key];
+      }
 
       return {
         ...state,
@@ -62,6 +80,8 @@ const useGameStore = create<GameState>()((set) => ({
         showGameOverDialog: gameOver,
         moves: moves,
         score: state.score + score,
+        merged: { ...state.merged },
+        generated: { ...state.generated },
       };
     }),
 
@@ -76,13 +96,23 @@ const useGameStore = create<GameState>()((set) => ({
       const row = randomRow();
       const col = randomCol();
 
-      board[row][col] = { value: randomCellValue() };
+      const newValue = randomCellValue();
+      board[row][col] = { value: newValue };
+
+      if (!state.generated[newValue]) {
+        state.generated[newValue] = 0;
+      }
+      state.generated[newValue] = state.generated[newValue] + 1;
 
       return {
+        ...state,
         board: board,
         hasStarted: true,
         isGameOver: false,
         showGameOverDialog: false,
+        score: 0,
+        moves: 0,
+        generated: { ...state.generated },
       };
     }),
 

@@ -5,8 +5,6 @@ import Tile from "./Tile";
 function Board() {
   const { board } = useGameStore();
 
-  console.log(`[Board] board=${JSON.stringify(board)}`);
-
   return (
     <div className="board">
       {board.map((row, r) => (
