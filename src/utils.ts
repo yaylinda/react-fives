@@ -103,6 +103,7 @@ export const moveOnBoard = (
         intermediateBoard[row][0].values.push(board[row][0].value);
       }
 
+      // Combine or move all the cells to the left
       for (let row = 0; row < NUM_ROWS; row++) {
         for (let col = 1; col < NUM_COLS; col++) {
           const cellValue = board[row][col].value;
@@ -110,6 +111,7 @@ export const moveOnBoard = (
 
           if (canCombine(cellValue, leftCellValue)) {
             intermediateBoard[row][col - 1].values.push(cellValue);
+            board[row][col].value = 0;
           } else {
             intermediateBoard[row][col].values.push(cellValue);
           }
@@ -117,10 +119,71 @@ export const moveOnBoard = (
       }
       break;
     case MoveDirection.RIGHT:
+      // Put all cells from the last column into the intermediate board
+      for (let row = 0; row < NUM_ROWS; row++) {
+        intermediateBoard[row][NUM_COLS - 1].values.push(
+          board[row][NUM_COLS - 1].value
+        );
+      }
+
+      // Combine or move all the cells to the right
+      for (let row = 0; row < NUM_ROWS; row++) {
+        for (let col = NUM_COLS - 2; col >= 0; col--) {
+          const cellValue = board[row][col].value;
+          const rightCellValue = board[row][col + 1].value;
+
+          if (canCombine(cellValue, rightCellValue)) {
+            intermediateBoard[row][col + 1].values.push(cellValue);
+            board[row][col].value = 0;
+          } else {
+            intermediateBoard[row][col].values.push(cellValue);
+          }
+        }
+      }
       break;
     case MoveDirection.UP:
+      // Put all cells from the first row into the intermediate board
+      for (let col = 0; col < NUM_COLS; col++) {
+        intermediateBoard[0][col].values.push(board[0][col].value);
+      }
+
+      // Combine or move all the cells to the top
+      for (let row = 1; row < NUM_ROWS; row++) {
+        for (let col = 0; col < NUM_COLS; col++) {
+          const cellValue = board[row][col].value;
+          const upCellValue = board[row - 1][col].value;
+
+          if (canCombine(cellValue, upCellValue)) {
+            intermediateBoard[row - 1][col].values.push(cellValue);
+            board[row][col].value = 0;
+          } else {
+            intermediateBoard[row][col].values.push(cellValue);
+          }
+        }
+      }
       break;
     case MoveDirection.DOWN:
+      // Put all cells from the last row into the intermediate board
+      for (let col = 0; col < NUM_COLS; col++) {
+        intermediateBoard[NUM_COLS - 1][col].values.push(
+          board[NUM_COLS - 1][col].value
+        );
+      }
+
+      // Combine or move all the cells to the bottom
+      for (let row = NUM_ROWS - 2; row >= 0; row--) {
+        for (let col = 0; col < NUM_COLS; col++) {
+          const cellValue = board[row][col].value;
+          const downCellValue = board[row + 1][col].value;
+
+          if (canCombine(cellValue, downCellValue)) {
+            intermediateBoard[row + 1][col].values.push(cellValue);
+            board[row][col].value = 0;
+          } else {
+            intermediateBoard[row][col].values.push(cellValue);
+          }
+        }
+      }
       break;
   }
 
@@ -144,21 +207,21 @@ export const moveOnBoard = (
 
 /**
  *
- * @param a
- * @param b
+ * @param curVal
+ * @param destVal
  * @returns
  */
-const canCombine = (a: number, b: number): boolean => {
-  if (a === 0 || b === 0) {
+const canCombine = (curVal: number, destVal: number): boolean => {
+  if (destVal === 0) {
     return true;
   }
 
   if (
-    (a === START_NUM_2 && b === START_NUM_3) ||
-    (a === START_NUM_3 && b === START_NUM_2)
+    (curVal === START_NUM_2 && destVal === START_NUM_3) ||
+    (curVal === START_NUM_3 && destVal === START_NUM_2)
   ) {
     return true;
   }
 
-  return a > START_NUM_3 && b > START_NUM_3 && a === b;
+  return curVal > START_NUM_3 && destVal > START_NUM_3 && curVal === destVal;
 };
