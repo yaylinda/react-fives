@@ -8,10 +8,18 @@ import Button from "@mui/material/Button";
 import {
   AppBar,
   createTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
   ThemeProvider,
   Toolbar,
   Typography,
 } from "@mui/material";
+import React from "react";
+import { TransitionProps } from "@mui/material/transitions";
 
 const ANIMATION_DURATION = 100;
 
@@ -21,8 +29,18 @@ const theme = createTheme({
   },
 });
 
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function App() {
-  const { hasStarted, move, newGame } = useGameStore();
+  const { hasStarted, isGameOver, move, newGame, closeGameOverDialog } =
+    useGameStore();
 
   /**
    *
@@ -82,6 +100,25 @@ function App() {
             <Typography>New Game</Typography>
           </Button>
         )}
+        <Dialog
+          className="dialog"
+          open={isGameOver}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={closeGameOverDialog}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>Game Over</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              <Typography>High Score: TODO</Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeGameOverDialog}>OK</Button>
+            <Button onClick={newGame}>New Game</Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </ThemeProvider>
   );

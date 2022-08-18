@@ -3,6 +3,7 @@ import { CellData, MoveDirection } from "./types";
 import {
   getCoordinatesForNewCell,
   initBoard,
+  isGameOver,
   moveOnBoard,
   randomCellValue,
   randomCol,
@@ -12,13 +13,16 @@ import {
 export interface GameState {
   hasStarted: boolean;
   board: CellData[][];
+  isGameOver: boolean;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
+  closeGameOverDialog: () => void;
 }
 
 const useGameStore = create<GameState>()((set) => ({
   hasStarted: false,
   board: initBoard(),
+  isGameOver: false,
 
   /**
    *
@@ -36,14 +40,13 @@ const useGameStore = create<GameState>()((set) => ({
 
       const board = moveOnBoard(state.board, dir);
 
-      const { col, row } = getCoordinatesForNewCell(dir); // TODO - don't put new cell if occupied
+      const { col, row } = getCoordinatesForNewCell(board, dir);
       board[row][col] = { value: randomCellValue() };
-
-      // TODO - detect if whole board is occupied
 
       return {
         ...state,
         board: [...board],
+        isGameOver: isGameOver(board),
       };
     }),
 
@@ -63,8 +66,15 @@ const useGameStore = create<GameState>()((set) => ({
       return {
         board: board,
         hasStarted: true,
+        isGameOver: false,
       };
     }),
+
+  /**
+   *
+   * @returns
+   */
+  closeGameOverDialog: () => set((state) => ({ ...state, isGameOver: false })),
 }));
 
 export default useGameStore;

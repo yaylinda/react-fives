@@ -1,4 +1,5 @@
 import { CellData, IntermediateCellData, MoveDirection } from "./types";
+import produce from "immer";
 
 export const NUM_ROWS = 5;
 export const NUM_COLS = 5;
@@ -66,8 +67,19 @@ export const randomCellValue = () => {
  * @returns
  */
 export const getCoordinatesForNewCell = (
+  board: CellData[][],
   dir: MoveDirection
 ): { col: number; row: number } => {
+  let coord = getNewCoordinateForDirection(dir);
+
+  while (board[coord.row][coord.col].value > 0) {
+    coord = getNewCoordinateForDirection(dir);
+  }
+
+  return coord;
+};
+
+const getNewCoordinateForDirection = (dir: MoveDirection) => {
   switch (dir) {
     case MoveDirection.LEFT:
       return { col: NUM_COLS - 1, row: randomRow() };
@@ -90,8 +102,6 @@ export const moveOnBoard = (
   board: CellData[][],
   dir: MoveDirection
 ): CellData[][] => {
-  console.log(`[moveOnBoard] board=${JSON.stringify(board)}`);
-
   const intermediateBoard: IntermediateCellData[][] = Array.from(
     Array(NUM_ROWS)
   ).map((_, r) => Array.from(Array(NUM_COLS)).map((_, c) => ({ values: [] })));
@@ -197,11 +207,6 @@ export const moveOnBoard = (
     }
   }
 
-  console.log(
-    `[moveOnBoard] intermediateBoard=${JSON.stringify(intermediateBoard)}`
-  );
-  console.log(`[moveOnBoard] newBoard=${JSON.stringify(newBoard)}`);
-
   return newBoard;
 };
 
@@ -224,4 +229,74 @@ const canCombine = (curVal: number, destVal: number): boolean => {
   }
 
   return curVal > START_NUM_3 && destVal > START_NUM_3 && curVal === destVal;
+};
+
+/**
+ *
+ * @param board
+ * @returns
+ */
+export const isGameOver = (board: CellData[][]): boolean => {
+  const boardFull = isBoardFull(board);
+
+  if (!boardFull) {
+    return false;
+  }
+
+  const left = moveOnBoard(
+    produce(board, (draft) => draft),
+    MoveDirection.LEFT
+  );
+  const right = moveOnBoard(
+    produce(board, (draft) => draft),
+    MoveDirection.LEFT
+  );
+  const up = moveOnBoard(
+    produce(board, (draft) => draft),
+    MoveDirection.LEFT
+  );
+  const down = moveOnBoard(
+    produce(board, (draft) => draft),
+    MoveDirection.LEFT
+  );
+
+  return [
+    isSame(board, left),
+    isSame(board, right),
+    isSame(board, up),
+    isSame(board, down),
+  ].every((v) => v);
+};
+
+/**
+ *
+ * @param board
+ * @returns
+ */
+const isBoardFull = (board: CellData[][]): boolean => {
+  for (let row = 0; row < NUM_ROWS; row++) {
+    for (let col = 0; col < NUM_COLS; col++) {
+      if (board[row][col].value === 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+/**
+ *
+ * @param board1
+ * @param board2
+ * @returns
+ */
+const isSame = (board1: CellData[][], board2: CellData[][]): boolean => {
+  for (let row = 0; row < NUM_ROWS; row++) {
+    for (let col = 0; col < NUM_COLS; col++) {
+      if (board1[row][col].value !== board2[row][col].value) {
+        return false;
+      }
+    }
+  }
+  return true;
 };
