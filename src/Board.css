@@ -1,6 +1,7 @@
 .board {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .row {
@@ -11,6 +12,6 @@
 .cell {
   height: 50px;
   width: 50px;
-  background-color:honeydew;
+  background-color: #222831;
   border-radius: 50%;
 }

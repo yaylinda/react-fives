@@ -3,3 +3,14 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.appBar {
+  background-color: #00ADB5!important;
+}
+
+.headerText {
+  color: #EEEEEE;
+  font-family: Silkscreen!important;
+  font-size: 36px!important;
+  text-align: center;
+}

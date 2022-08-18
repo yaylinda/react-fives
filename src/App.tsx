@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import useGameStore from "./gameStore";
 import { convertKeyCodeToDirection } from "./utils";
 import Button from "@mui/material/Button";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 const ANIMATION_DURATION = 250;
 
@@ -45,10 +46,22 @@ function App() {
 
   return (
     <div className="app">
+      <AppBar className="appBar" position="static">
+        <Toolbar>
+          <Typography
+            className="headerText"
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+          >
+            Fives
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <Board />
       {!hasStarted && (
         <Button variant="contained" color="success" onClick={newGame}>
-          New Game
+          <Typography>New Game</Typography>
         </Button>
       )}
     </div>

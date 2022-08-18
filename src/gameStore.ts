@@ -1,6 +1,6 @@
 import create from "zustand";
 import { CellData, MoveDirection } from "./types";
-import { initBoard } from "./utils";
+import { initBoard, randomCellValue, randomCol, randomRow } from "./utils";
 
 export interface GameState {
   hasStarted: boolean;
@@ -36,9 +36,15 @@ const useGameStore = create<GameState>()((set) => ({
    */
   newGame: () =>
     set((state) => {
-      // TODO - put tile on board
+      const board = initBoard();
+
+      const row = randomRow();
+      const col = randomCol();
+
+      board[row][col] = { value: randomCellValue() };
+
       return {
-        board: initBoard(),
+        board: board,
         hasStarted: true,
       };
     }),

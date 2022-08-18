@@ -1,4 +1,4 @@
-import { MoveDirection } from "./types";
+import { CellData, MoveDirection } from "./types";
 
 export const NUM_ROWS = 5;
 export const NUM_COLS = 5;
@@ -25,8 +25,32 @@ export const convertKeyCodeToDirection = (
   }
 };
 
-export const initBoard = () => {
+/**
+ *
+ * @returns
+ */
+export const initBoard = (): CellData[][] => {
   return Array.from(Array(NUM_ROWS)).map((_, r) =>
     Array.from(Array(NUM_COLS)).map((_, c) => ({ value: null }))
   );
+};
+
+/**
+ *
+ * @returns
+ */
+export const randomRow = () => Math.floor(Math.random() * NUM_ROWS);
+
+/**
+ *
+ * @returns
+ */
+export const randomCol = () => Math.floor(Math.random() * NUM_COLS);
+
+/**
+ *
+ * @returns
+ */
+export const randomCellValue = () => {
+  return 2; // TODO - implement distribution
 };

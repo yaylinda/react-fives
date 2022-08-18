@@ -1,5 +1,6 @@
 import "./Board.css";
 import useGameStore from "./gameStore";
+import Tile from "./Tile";
 
 function Board() {
   const { board } = useGameStore();
@@ -10,8 +11,10 @@ function Board() {
     <div className="board">
       {board.map((row, r) => (
         <div key={`row_${r}`} className="row">
-          {row.map((_, c) => (
-            <div key={`row_${r}_col_${c}`} className="cell"></div>
+          {row.map((cell, c) => (
+            <div key={`row_${r}_col_${c}`} className="cell">
+              <Tile value={cell.value} />
+            </div>
           ))}
         </div>
       ))}
