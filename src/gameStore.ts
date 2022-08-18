@@ -14,6 +14,7 @@ export interface GameState {
   hasStarted: boolean;
   board: CellData[][];
   isGameOver: boolean;
+  score: number;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
@@ -23,6 +24,7 @@ const useGameStore = create<GameState>()((set) => ({
   hasStarted: false,
   board: initBoard(),
   isGameOver: false,
+  score: 0,
 
   /**
    *
@@ -40,8 +42,10 @@ const useGameStore = create<GameState>()((set) => ({
 
       const board = moveOnBoard(state.board, dir);
 
-      const { col, row } = getCoordinatesForNewCell(board, dir);
-      board[row][col] = { value: randomCellValue() };
+      const coords = getCoordinatesForNewCell(board, dir);
+      if (coords != null) {
+        board[coords.row][coords.col] = { value: randomCellValue() };
+      }
 
       return {
         ...state,

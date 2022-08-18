@@ -69,27 +69,83 @@ export const randomCellValue = () => {
 export const getCoordinatesForNewCell = (
   board: CellData[][],
   dir: MoveDirection
-): { col: number; row: number } => {
-  let coord = getNewCoordinateForDirection(dir);
+): { col: number; row: number } | null => {
+  switch (dir) {
+    case MoveDirection.LEFT: {
+      const values = [];
+      for (let row = 0; row < NUM_ROWS; row++) {
+        values.push(board[row][NUM_COLS - 1].value);
+      }
 
-  while (board[coord.row][coord.col].value > 0) {
-    coord = getNewCoordinateForDirection(dir);
+      const index = getRandomIndex(values);
+
+      if (index == null) {
+        return null;
+      }
+
+      return { col: NUM_COLS - 1, row: index };
+    }
+    case MoveDirection.RIGHT: {
+      const values = [];
+      for (let row = 0; row < NUM_ROWS; row++) {
+        values.push(board[row][0].value);
+      }
+
+      const index = getRandomIndex(values);
+
+      if (index == null) {
+        return null;
+      }
+
+      return { col: 0, row: index };
+    }
+    case MoveDirection.UP: {
+      const values = [];
+      for (let col = 0; col < NUM_COLS; col++) {
+        values.push(board[NUM_ROWS - 1][col].value);
+      }
+
+      const index = getRandomIndex(values);
+
+      if (index == null) {
+        return null;
+      }
+
+      return { col: index, row: NUM_ROWS - 1 };
+    }
+    case MoveDirection.DOWN: {
+      const values = [];
+      for (let col = 0; col < NUM_COLS; col++) {
+        values.push(board[0][col].value);
+      }
+
+      const index = getRandomIndex(values);
+
+      if (index == null) {
+        return null;
+      }
+
+      return { col: index, row: 0 };
+    }
   }
-
-  return coord;
 };
 
-const getNewCoordinateForDirection = (dir: MoveDirection) => {
-  switch (dir) {
-    case MoveDirection.LEFT:
-      return { col: NUM_COLS - 1, row: randomRow() };
-    case MoveDirection.RIGHT:
-      return { col: 0, row: randomRow() };
-    case MoveDirection.UP:
-      return { col: randomCol(), row: NUM_ROWS - 1 };
-    case MoveDirection.DOWN:
-      return { col: randomCol(), row: 0 };
+/**
+ *
+ * @param values
+ * @returns
+ */
+const getRandomIndex = (values: number[]) => {
+  if (values.every((v) => v > 0)) {
+    return null;
   }
+
+  const emptyIndices = values
+    .map((v, i) => (v === 0 ? i : -1))
+    .filter((i) => i !== -1);
+  const index = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+
+  return index;
 };
 
 /**
