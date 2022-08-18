@@ -6,5 +6,9 @@ export enum MoveDirection {
 }
 
 export interface CellData {
-  value: number | null;
+  value: number;
+}
+
+export interface IntermediateCellData {
+  values: number[];
 }

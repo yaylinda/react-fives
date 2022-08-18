@@ -1,6 +1,13 @@
 import create from "zustand";
 import { CellData, MoveDirection } from "./types";
-import { initBoard, randomCellValue, randomCol, randomRow } from "./utils";
+import {
+  getCoordinatesForNewCell,
+  initBoard,
+  moveOnBoard,
+  randomCellValue,
+  randomCol,
+  randomRow,
+} from "./utils";
 
 export interface GameState {
   hasStarted: boolean;
@@ -26,8 +33,18 @@ const useGameStore = create<GameState>()((set) => ({
       }
 
       console.log(`[gameStore][move] direction: ${dir}`);
-      // TODO - implement moving tiles on board
-      return state;
+
+      const board = moveOnBoard(state.board, dir);
+
+      const { col, row } = getCoordinatesForNewCell(dir); // TODO - don't put new cell if occupied
+      board[row][col] = { value: randomCellValue() };
+
+      // TODO - detect if whole board is occupied
+
+      return {
+        ...state,
+        board: [...board],
+      };
     }),
 
   /**

@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const ANIMATION_DURATION = 250;
+const ANIMATION_DURATION = 100;
 
 const theme = createTheme({
   typography: {
