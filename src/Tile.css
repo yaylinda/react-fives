@@ -6,7 +6,10 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: 30px;
+  font-size: 24px;
+  background-color: #EEEEEE;
+  color: #222831;
+  border: 4px solid;
 }
 
 .tile_2 {
@@ -14,6 +17,7 @@
   width: 50px;
   background-color: #00ADB5;
   color: #EEEEEE;
+  border: none;
 }
 
 .tile_3 {
@@ -21,4 +25,70 @@
   width: 50px;
   background-color: #C5E99B;
   color: #222831;
+  border: none;
+}
+
+.tile_5 {
+  border-color: #66c2a5;
+}
+
+.tile_10 {
+  border-color: #3288bd;
+}
+
+.tile_20 {
+  border-color: #5e4fa2;
+}
+
+.tile_40 {
+  border-color: #9e0142;
+}
+
+.tile_80 {
+  border-color: #d53e4f;
+}
+
+.tile_160 {
+  border-color: #f46d43;
+  font-size: 24px;
+}
+
+.tile_320 {
+  border-color: #fdae61;
+  font-size: 24px;
+}
+
+.tile_640 {
+  border-color: #fee08b;
+  font-size: 24px;
+}
+
+.tile_1280 {
+  border-color: #e6f598;
+  font-size: 14px;
+}
+
+.tile_2560 {
+  border-color: #abdda4;
+  font-size: 14px;
+}
+
+.tile_5120 {
+  border-color: #66c2a5;
+  font-size: 14px;
+}
+
+.tile_10240 {
+  border-color: #3288bd;
+  font-size: 10px;
+}
+
+.tile_20480 {
+  border-color: #5e4fa2;
+  font-size: 10px;
+}
+
+.tile_40960 {
+  border-color: #9e0142;
+  font-size: 10px;
 }
