@@ -1,5 +1,5 @@
 import { CellData, IntermediateCellData, MoveDirection } from "./types";
-import produce from "immer";
+import { sum } from "lodash";
 
 export const NUM_ROWS = 5;
 export const NUM_COLS = 5;
@@ -157,7 +157,7 @@ const getRandomIndex = (values: number[]) => {
 export const moveOnBoard = (
   board: CellData[][],
   dir: MoveDirection
-): CellData[][] => {
+): { board: CellData[][]; score: number } => {
   const intermediateBoard: IntermediateCellData[][] = Array.from(
     Array(NUM_ROWS)
   ).map((_, r) => Array.from(Array(NUM_COLS)).map((_, c) => ({ values: [] })));
@@ -253,17 +253,26 @@ export const moveOnBoard = (
       break;
   }
 
+  console.log(`intermediateBoard=${JSON.stringify(intermediateBoard)}`);
+
+  let moveScore = 0;
   const newBoard = initBoard();
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
-      newBoard[row][col].value = intermediateBoard[row][col].values.reduce(
-        (partialSum, a) => partialSum + a,
-        0
+      const filteredValues = intermediateBoard[row][col].values.filter(
+        (v) => v > 0
       );
+
+      const cellTotal = sum(filteredValues);
+      newBoard[row][col].value = cellTotal;
+
+      if (filteredValues.length > 1) {
+        moveScore += cellTotal;
+      }
     }
   }
 
-  return newBoard;
+  return { board: newBoard, score: moveScore };
 };
 
 /**
@@ -300,27 +309,24 @@ export const isGameOver = (board: CellData[][]): boolean => {
   }
 
   const left = moveOnBoard(
-    produce(board, (draft) => draft),
+    JSON.parse(JSON.stringify(board)),
     MoveDirection.LEFT
   );
   const right = moveOnBoard(
-    produce(board, (draft) => draft),
-    MoveDirection.LEFT
+    JSON.parse(JSON.stringify(board)),
+    MoveDirection.RIGHT
   );
-  const up = moveOnBoard(
-    produce(board, (draft) => draft),
-    MoveDirection.LEFT
-  );
+  const up = moveOnBoard(JSON.parse(JSON.stringify(board)), MoveDirection.UP);
   const down = moveOnBoard(
-    produce(board, (draft) => draft),
-    MoveDirection.LEFT
+    JSON.parse(JSON.stringify(board)),
+    MoveDirection.DOWN
   );
 
   return [
-    isSame(board, left),
-    isSame(board, right),
-    isSame(board, up),
-    isSame(board, down),
+    isSame(board, left.board),
+    isSame(board, right.board),
+    isSame(board, up.board),
+    isSame(board, down.board),
   ].every((v) => v);
 };
 

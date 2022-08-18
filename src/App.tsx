@@ -39,8 +39,16 @@ const Transition = React.forwardRef(function Transition(
 });
 
 function App() {
-  const { hasStarted, isGameOver, move, newGame, closeGameOverDialog } =
-    useGameStore();
+  const {
+    hasStarted,
+    isGameOver,
+    showGameOverDialog,
+    moves,
+    score,
+    move,
+    newGame,
+    closeGameOverDialog,
+  } = useGameStore();
 
   /**
    *
@@ -89,8 +97,12 @@ function App() {
             </Typography>
           </Toolbar>
         </AppBar>
+        <div className="statsBar">
+          <Typography>Score: {score}</Typography>
+          <Typography>Moves: {moves}</Typography>
+        </div>
         <Board />
-        {!hasStarted && (
+        {(!hasStarted || isGameOver) && (
           <Button
             className="button"
             variant="contained"
@@ -102,7 +114,7 @@ function App() {
         )}
         <Dialog
           className="dialog"
-          open={isGameOver}
+          open={showGameOverDialog}
           TransitionComponent={Transition}
           keepMounted
           onClose={closeGameOverDialog}
@@ -111,7 +123,8 @@ function App() {
           <DialogTitle>Game Over</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              <Typography>High Score: TODO</Typography>
+              <Typography>Score: {score}</Typography>
+              <Typography>Moves: {moves}</Typography>
             </DialogContentText>
           </DialogContent>
           <DialogActions>

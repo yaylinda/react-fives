@@ -6,12 +6,20 @@
 
 .appBar {
   background-color: #00ADB5!important;
+  margin-bottom: 50px;
 }
 
 .headerText {
   color: #EEEEEE;
   font-size: 36px!important;
   text-align: center;
+}
+
+.statsBar {
+  align-self: center;
+  margin-bottom: 20px;
+  color: #EEEEEE;
+  font-weight: '700';
 }
 
 .button {

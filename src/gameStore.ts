@@ -14,7 +14,9 @@ export interface GameState {
   hasStarted: boolean;
   board: CellData[][];
   isGameOver: boolean;
+  showGameOverDialog: boolean;
   score: number;
+  moves: number;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
@@ -24,7 +26,9 @@ const useGameStore = create<GameState>()((set) => ({
   hasStarted: false,
   board: initBoard(),
   isGameOver: false,
+  showGameOverDialog: false,
   score: 0,
+  moves: 0,
 
   /**
    *
@@ -40,17 +44,24 @@ const useGameStore = create<GameState>()((set) => ({
 
       console.log(`[gameStore][move] direction: ${dir}`);
 
-      const board = moveOnBoard(state.board, dir);
+      const { board, score } = moveOnBoard(state.board, dir);
 
+      let moves = state.moves;
       const coords = getCoordinatesForNewCell(board, dir);
       if (coords != null) {
         board[coords.row][coords.col] = { value: randomCellValue() };
+        moves = moves + 1;
       }
+
+      const gameOver = isGameOver(board);
 
       return {
         ...state,
         board: [...board],
-        isGameOver: isGameOver(board),
+        isGameOver: gameOver,
+        showGameOverDialog: gameOver,
+        moves: moves,
+        score: state.score + score,
       };
     }),
 
@@ -71,6 +82,7 @@ const useGameStore = create<GameState>()((set) => ({
         board: board,
         hasStarted: true,
         isGameOver: false,
+        showGameOverDialog: false,
       };
     }),
 
@@ -78,7 +90,8 @@ const useGameStore = create<GameState>()((set) => ({
    *
    * @returns
    */
-  closeGameOverDialog: () => set((state) => ({ ...state, isGameOver: false })),
+  closeGameOverDialog: () =>
+    set((state) => ({ ...state, showGameOverDialog: false })),
 }));
 
 export default useGameStore;
