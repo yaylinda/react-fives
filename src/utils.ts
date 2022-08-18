@@ -3,6 +3,9 @@ import { CellData, MoveDirection } from "./types";
 export const NUM_ROWS = 5;
 export const NUM_COLS = 5;
 
+export const START_NUM_2 = 2;
+export const START_NUM_3 = 3;
+
 /**
  *
  * @param code
@@ -52,5 +55,7 @@ export const randomCol = () => Math.floor(Math.random() * NUM_COLS);
  * @returns
  */
 export const randomCellValue = () => {
-  return 2; // TODO - implement distribution
+  return (
+    Math.floor(Math.random() * (START_NUM_3 - START_NUM_2 + 1)) + START_NUM_2
+  ); // TODO - implement distribution
 };

@@ -2,10 +2,23 @@
   height: 42px;
   width: 42px;
   border-radius: 50%;
-  border: 4px solid black; /* TODO - other border colors */
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   font-size: 30px;
+}
+
+.tile_2 {
+  height: 50px;
+  width: 50px;
+  background-color: #00ADB5;
+  color: #EEEEEE;
+}
+
+.tile_3 {
+  height: 50px;
+  width: 50px;
+  background-color: #C5E99B;
+  color: #222831;
 }

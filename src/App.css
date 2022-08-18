@@ -10,7 +10,14 @@
 
 .headerText {
   color: #EEEEEE;
-  font-family: Silkscreen!important;
   font-size: 36px!important;
   text-align: center;
+}
+
+.button {
+  width: 270px;
+  align-self: center;
+  background-color: #00ADB5!important;
+  color: #EEEEEE;
+  font-size: 36px!important;
 }
