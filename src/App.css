@@ -16,10 +16,19 @@
 }
 
 .statsBar {
+  display: flex;
+  flex-direction: row;
   align-self: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   color: #EEEEEE;
-  font-weight: '700';
+}
+
+.nextBar {
+  display: flex;
+  flex-direction: row;
+  color: #EEEEEE;
+  margin-bottom: 20px;
+  color: #EEEEEE;
 }
 
 .button {
