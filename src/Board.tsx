@@ -6,6 +6,8 @@ import Tile from "./Tile";
 function Board() {
   const { board } = useGameStore();
 
+  // TODO - animations on board when tiles move and merge
+
   return (
     <Box
       sx={{

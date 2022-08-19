@@ -43,6 +43,10 @@ function App() {
     };
   }, [throttledHandleKeyDown]);
 
+  // TODO - if on mobile, implement swipe, or virtual keyboard
+
+  // TODO - implement a help dialog
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" sx={{ color: colors.LIGHT }}>
