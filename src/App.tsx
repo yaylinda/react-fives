@@ -45,7 +45,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{ backgroundColor: colors.BRAND }}>
+      <AppBar position="static" sx={{ color: colors.LIGHT }}>
         <Toolbar>
           <Typography sx={{ fontSize: 40, textAlign: "center", flexGrow: 1 }}>
             Fives

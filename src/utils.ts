@@ -67,14 +67,14 @@ export const randomCellValue = (
 ) => {
   // At the beginning of the game, randomly return 2 or 3
   if (Object.keys(merged).length === 0) {
-    return shuffle(STARTING_NUMS)[0];
+    return randomStartingNum(generated);
   }
 
   // Decide if we want to randomly return one of the other values
   const numMerges = sum(Object.values(merged));
   if (Math.random() <= numMerges / moves) {
     if (Math.random() <= 0.5) {
-      return shuffle(STARTING_NUMS)[0];
+      return randomStartingNum(generated);
     }
 
     // TODO - this could be memoized and not recalculated each time
@@ -96,6 +96,15 @@ export const randomCellValue = (
     return Number(shuffle(choices)[0]);
   }
 
+  return randomStartingNum(generated);
+};
+
+/**
+ *
+ * @param generated
+ * @returns
+ */
+const randomStartingNum = (generated: { [key in number]: number }) => {
   // Try to balance between 2's and 3's
   if (
     Math.abs(generated[START_NUM_2] - generated[START_NUM_3]) >

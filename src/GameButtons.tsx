@@ -9,6 +9,7 @@ function GameButtons() {
     return null;
   }
 
+  // TODO - button to restart game in the middle of a game
   return (
     <Box
       sx={{
@@ -20,7 +21,7 @@ function GameButtons() {
       <Button
         variant="contained"
         onClick={newGame}
-        sx={{ backgroundColor: colors.BRAND, color: colors.LIGHT }}
+        sx={{ color: colors.LIGHT }}
       >
         <Typography>New Game</Typography>
       </Button>

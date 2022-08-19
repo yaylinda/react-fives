@@ -14,6 +14,11 @@ const theme = createTheme({
   typography: {
     fontFamily: ["Silkscreen"].join(","),
   },
+  palette: {
+    primary: {
+      main: colors.BRAND,
+    },
+  },
 });
 
 export default theme;
