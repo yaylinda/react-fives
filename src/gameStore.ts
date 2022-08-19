@@ -19,7 +19,7 @@ export interface GameState {
   moves: number;
   merged: { [key in number]: number };
   generated: { [key in number]: number };
-  nextValues: number[];
+  nextValue: number;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
@@ -34,7 +34,7 @@ const useGameStore = create<GameState>()((set) => ({
   moves: 0,
   merged: {},
   generated: {},
-  nextValues: [],
+  nextValue: 0,
 
   /**
    *
@@ -57,7 +57,7 @@ const useGameStore = create<GameState>()((set) => ({
       const coords = getCoordinatesForNewCell(board, dir);
       if (coords != null) {
         usedNextValue = true;
-        const newValue = state.nextValues[0];
+        const newValue = state.nextValue;
         board[coords.row][coords.col] = { value: newValue };
 
         if (!state.generated[newValue]) {
@@ -86,9 +86,7 @@ const useGameStore = create<GameState>()((set) => ({
         score: state.score + score,
         merged: { ...state.merged },
         generated: { ...state.generated },
-        nextValues: usedNextValue
-          ? [state.nextValues[1], state.nextValues[2], randomCellValue()]
-          : [...state.nextValues],
+        nextValue: usedNextValue ? randomCellValue() : state.nextValue,
       };
     }),
 
@@ -120,7 +118,7 @@ const useGameStore = create<GameState>()((set) => ({
         score: 0,
         moves: 0,
         generated: { ...state.generated },
-        nextValues: [randomCellValue(), randomCellValue(), randomCellValue()], // TODO - 3 for now, maybe make this configurable
+        nextValue: randomCellValue(),
       };
     }),
 

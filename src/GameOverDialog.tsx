@@ -26,14 +26,11 @@ const Transition = React.forwardRef(function Transition(
 
 function GameOverDialog() {
   const {
-    hasStarted,
-    isGameOver,
     showGameOverDialog,
     moves,
     score,
     merged,
     generated,
-    nextValues,
     move,
     newGame,
     closeGameOverDialog,
