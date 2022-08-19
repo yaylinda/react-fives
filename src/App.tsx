@@ -1,4 +1,3 @@
-import "./App.css";
 import { useThrottledCallback } from "use-debounce";
 import { useEffect } from "react";
 import useGameStore from "./gameStore";
@@ -6,7 +5,7 @@ import { convertKeyCodeToDirection } from "./utils";
 import { AppBar, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import Game from "./Game";
 import GameOverDialog from "./GameOverDialog";
-import theme from "./theme";
+import theme, { colors } from "./theme";
 
 const ANIMATION_DURATION = 100;
 
@@ -46,9 +45,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar className="appBar" position="static">
+      <AppBar position="static" sx={{ backgroundColor: colors.BRAND }}>
         <Toolbar>
-          <Typography className="headerText" sx={{ flexGrow: 1 }}>
+          <Typography sx={{ fontSize: 40, textAlign: "center", flexGrow: 1 }}>
             Fives
           </Typography>
         </Toolbar>

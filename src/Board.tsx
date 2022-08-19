@@ -1,22 +1,44 @@
-import "./Board.css";
+import { Box } from "@mui/material";
 import useGameStore from "./gameStore";
+import { colors } from "./theme";
 import Tile from "./Tile";
 
 function Board() {
   const { board } = useGameStore();
 
   return (
-    <div className="board">
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "5px",
+      }}
+    >
       {board.map((row, r) => (
-        <div key={`row_${r}`} className="row">
+        <Box
+          key={`row_${r}`}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "5px",
+          }}
+        >
           {row.map((cell, c) => (
-            <div key={`row_${r}_col_${c}`} className="cell">
+            <Box
+              key={`row_${r}_col_${c}`}
+              sx={{
+                height: 50,
+                width: 50,
+                backgroundColor: colors.DARK,
+                borderRadius: "50%",
+              }}
+            >
               <Tile value={cell.value} />
-            </div>
+            </Box>
           ))}
-        </div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 }
 
