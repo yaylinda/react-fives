@@ -1,12 +1,16 @@
 import { CellData, IntermediateCellData, MoveDirection } from "./types";
-import { intersection, shuffle, sum } from "lodash";
+import { shuffle, sum } from "lodash";
 
 export const NUM_ROWS = 5;
 export const NUM_COLS = 5;
 
 export const START_NUM_2 = 2;
 export const START_NUM_3 = 3;
-export const NUM_10 = 10;
+export const STARTING_NUMS = [START_NUM_2, START_NUM_3];
+export const START_NUM_DIFF_THRESHOLD = 5;
+export const MERGABLES = [
+  5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 20480, 40960,
+];
 
 /**
  *
@@ -56,10 +60,56 @@ export const randomCol = () => Math.floor(Math.random() * NUM_COLS);
  *
  * @returns
  */
-export const randomCellValue = () => {
-  return (
-    Math.floor(Math.random() * (START_NUM_3 - START_NUM_2 + 1)) + START_NUM_2
-  ); // TODO - implement distribution
+export const randomCellValue = (
+  merged: { [key in number]: number },
+  generated: { [key in number]: number },
+  moves: number
+) => {
+  // At the beginning of the game, randomly return 2 or 3
+  if (Object.keys(merged).length === 0) {
+    return shuffle(STARTING_NUMS)[0];
+  }
+
+  // Decide if we want to randomly return one of the other values
+  const numMerges = sum(Object.values(merged));
+  if (Math.random() <= numMerges / moves) {
+    if (Math.random() <= 0.5) {
+      return shuffle(STARTING_NUMS)[0];
+    }
+
+    // TODO - this could be memoized and not recalculated each time
+
+    const probabilities: { [key in number]: number } = {};
+    for (let key in merged) {
+      const multiplier = MERGABLES.indexOf(Number(key)) + 1;
+      const probability = 1 / Math.pow(2, multiplier);
+      probabilities[key] = probability;
+    }
+
+    const probabilitiesSum = sum(Object.values(probabilities)) + 0.5;
+
+    const choices = [];
+    for (let key in merged) {
+      const num = Math.floor((probabilities[key] / probabilitiesSum) * 100);
+      choices.push(...Array(num).fill(key));
+    }
+    return Number(shuffle(choices)[0]);
+  }
+
+  // Try to balance between 2's and 3's
+  if (
+    Math.abs(generated[START_NUM_2] - generated[START_NUM_3]) >
+    START_NUM_DIFF_THRESHOLD
+  ) {
+    if (generated[START_NUM_2] > generated[START_NUM_3]) {
+      return START_NUM_3;
+    } else {
+      return START_NUM_2;
+    }
+  }
+
+  // Randomly return 2 or 3
+  return shuffle(STARTING_NUMS)[0];
 };
 
 /**
@@ -80,14 +130,11 @@ export const getCoordinatesForNewCell = (
       }
 
       const emptyIndices = getEmptyIndices(values);
-      const emptyAndMoved = intersection(emptyIndices, moved.rows);
-
-      if (emptyAndMoved.length === 0) {
+      if (emptyIndices.length === 0) {
         return null;
       }
 
-      const index = shuffle(emptyAndMoved)[0];
-
+      const index = shuffle(moved.rows)[0];
       return { col: NUM_COLS - 1, row: index };
     }
     case MoveDirection.RIGHT: {
@@ -97,14 +144,11 @@ export const getCoordinatesForNewCell = (
       }
 
       const emptyIndices = getEmptyIndices(values);
-      const emptyAndMoved = intersection(emptyIndices, moved.rows);
-
-      if (emptyAndMoved.length === 0) {
+      if (emptyIndices.length === 0) {
         return null;
       }
 
-      const index = shuffle(emptyAndMoved)[0];
-
+      const index = shuffle(moved.rows)[0];
       return { col: 0, row: index };
     }
     case MoveDirection.UP: {
@@ -114,14 +158,11 @@ export const getCoordinatesForNewCell = (
       }
 
       const emptyIndices = getEmptyIndices(values);
-      const emptyAndMoved = intersection(emptyIndices, moved.cols);
-
-      if (emptyAndMoved.length === 0) {
+      if (emptyIndices.length === 0) {
         return null;
       }
 
-      const index = shuffle(emptyAndMoved)[0];
-
+      const index = shuffle(moved.cols)[0];
       return { col: index, row: NUM_ROWS - 1 };
     }
     case MoveDirection.DOWN: {
@@ -131,13 +172,11 @@ export const getCoordinatesForNewCell = (
       }
 
       const emptyIndices = getEmptyIndices(values);
-      const emptyAndMoved = intersection(emptyIndices, moved.cols);
-
-      if (emptyAndMoved.length === 0) {
+      if (emptyIndices.length === 0) {
         return null;
       }
 
-      const index = shuffle(emptyAndMoved)[0];
+      const index = shuffle(moved.cols)[0];
       return { col: index, row: 0 };
     }
   }
@@ -268,8 +307,6 @@ export const moveOnBoard = (
       }
       break;
   }
-
-  console.log(`intermediateBoard=${JSON.stringify(intermediateBoard)}`);
 
   let moveScore = 0;
   const merged: { [key in number]: number } = {};

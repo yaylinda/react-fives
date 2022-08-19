@@ -44,11 +44,8 @@ const useGameStore = create<GameState>()((set) => ({
   move: (dir: MoveDirection) =>
     set((state) => {
       if (!state.hasStarted) {
-        console.log(`[gameStore][move] game has not started. no-op`);
         return state;
       }
-
-      console.log(`[gameStore][move] direction: ${dir}`);
 
       const { board, merged, score, moved } = moveOnBoard(state.board, dir);
 
@@ -86,7 +83,9 @@ const useGameStore = create<GameState>()((set) => ({
         score: state.score + score,
         merged: { ...state.merged },
         generated: { ...state.generated },
-        nextValue: usedNextValue ? randomCellValue() : state.nextValue,
+        nextValue: usedNextValue
+          ? randomCellValue(state.merged, state.generated, moves)
+          : state.nextValue,
       };
     }),
 
@@ -101,13 +100,8 @@ const useGameStore = create<GameState>()((set) => ({
       const row = randomRow();
       const col = randomCol();
 
-      const newValue = randomCellValue();
+      const newValue = randomCellValue({}, {}, 0);
       board[row][col] = { value: newValue };
-
-      if (!state.generated[newValue]) {
-        state.generated[newValue] = 0;
-      }
-      state.generated[newValue] = state.generated[newValue] + 1;
 
       return {
         ...state,
@@ -119,7 +113,7 @@ const useGameStore = create<GameState>()((set) => ({
         moves: 0,
         merged: {},
         generated: {},
-        nextValue: randomCellValue(),
+        nextValue: randomCellValue({}, {}, 0),
       };
     }),
 
