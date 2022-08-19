@@ -12,7 +12,7 @@ function GameButtons() {
   return (
     <Box
       sx={{
-        marginTop: 3,
+        marginTop: 5,
         display: "flex",
         justifyContent: "center",
       }}

@@ -50,11 +50,11 @@ const useGameStore = create<GameState>()((set) => ({
 
       console.log(`[gameStore][move] direction: ${dir}`);
 
-      const { board, merged, score } = moveOnBoard(state.board, dir);
+      const { board, merged, score, moved } = moveOnBoard(state.board, dir);
 
       let usedNextValue = false;
       let moves = state.moves;
-      const coords = getCoordinatesForNewCell(board, dir);
+      const coords = getCoordinatesForNewCell(board, dir, moved);
       if (coords != null) {
         usedNextValue = true;
         const newValue = state.nextValue;
@@ -117,7 +117,8 @@ const useGameStore = create<GameState>()((set) => ({
         showGameOverDialog: false,
         score: 0,
         moves: 0,
-        generated: { ...state.generated },
+        merged: {},
+        generated: {},
         nextValue: randomCellValue(),
       };
     }),

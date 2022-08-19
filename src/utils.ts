@@ -1,11 +1,12 @@
 import { CellData, IntermediateCellData, MoveDirection } from "./types";
-import { sum } from "lodash";
+import { intersection, shuffle, sum } from "lodash";
 
 export const NUM_ROWS = 5;
 export const NUM_COLS = 5;
 
 export const START_NUM_2 = 2;
 export const START_NUM_3 = 3;
+export const NUM_10 = 10;
 
 /**
  *
@@ -68,7 +69,8 @@ export const randomCellValue = () => {
  */
 export const getCoordinatesForNewCell = (
   board: CellData[][],
-  dir: MoveDirection
+  dir: MoveDirection,
+  moved: { cols: number[]; rows: number[] }
 ): { col: number; row: number } | null => {
   switch (dir) {
     case MoveDirection.LEFT: {
@@ -77,11 +79,14 @@ export const getCoordinatesForNewCell = (
         values.push(board[row][NUM_COLS - 1].value);
       }
 
-      const index = getRandomIndex(values);
+      const emptyIndices = getEmptyIndices(values);
+      const emptyAndMoved = intersection(emptyIndices, moved.rows);
 
-      if (index == null) {
+      if (emptyAndMoved.length === 0) {
         return null;
       }
+
+      const index = shuffle(emptyAndMoved)[0];
 
       return { col: NUM_COLS - 1, row: index };
     }
@@ -91,11 +96,14 @@ export const getCoordinatesForNewCell = (
         values.push(board[row][0].value);
       }
 
-      const index = getRandomIndex(values);
+      const emptyIndices = getEmptyIndices(values);
+      const emptyAndMoved = intersection(emptyIndices, moved.rows);
 
-      if (index == null) {
+      if (emptyAndMoved.length === 0) {
         return null;
       }
+
+      const index = shuffle(emptyAndMoved)[0];
 
       return { col: 0, row: index };
     }
@@ -105,11 +113,14 @@ export const getCoordinatesForNewCell = (
         values.push(board[NUM_ROWS - 1][col].value);
       }
 
-      const index = getRandomIndex(values);
+      const emptyIndices = getEmptyIndices(values);
+      const emptyAndMoved = intersection(emptyIndices, moved.cols);
 
-      if (index == null) {
+      if (emptyAndMoved.length === 0) {
         return null;
       }
+
+      const index = shuffle(emptyAndMoved)[0];
 
       return { col: index, row: NUM_ROWS - 1 };
     }
@@ -119,12 +130,14 @@ export const getCoordinatesForNewCell = (
         values.push(board[0][col].value);
       }
 
-      const index = getRandomIndex(values);
+      const emptyIndices = getEmptyIndices(values);
+      const emptyAndMoved = intersection(emptyIndices, moved.cols);
 
-      if (index == null) {
+      if (emptyAndMoved.length === 0) {
         return null;
       }
 
+      const index = shuffle(emptyAndMoved)[0];
       return { col: index, row: 0 };
     }
   }
@@ -135,17 +148,8 @@ export const getCoordinatesForNewCell = (
  * @param values
  * @returns
  */
-const getRandomIndex = (values: number[]) => {
-  if (values.every((v) => v > 0)) {
-    return null;
-  }
-
-  const emptyIndices = values
-    .map((v, i) => (v === 0 ? i : -1))
-    .filter((i) => i !== -1);
-  const index = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-
-  return index;
+const getEmptyIndices = (values: number[]) => {
+  return values.map((v, i) => (v === 0 ? i : -1)).filter((i) => i !== -1);
 };
 
 /**
@@ -161,10 +165,14 @@ export const moveOnBoard = (
   board: CellData[][];
   merged: { [key in number]: number };
   score: number;
+  moved: { rows: number[]; cols: number[] };
 } => {
   const intermediateBoard: IntermediateCellData[][] = Array.from(
     Array(NUM_ROWS)
   ).map((_, r) => Array.from(Array(NUM_COLS)).map((_, c) => ({ values: [] })));
+
+  const movedRows = [];
+  const movedCols = [];
 
   switch (dir) {
     case MoveDirection.LEFT:
@@ -182,6 +190,7 @@ export const moveOnBoard = (
           if (canCombine(cellValue, leftCellValue)) {
             intermediateBoard[row][col - 1].values.push(cellValue);
             board[row][col].value = 0;
+            movedRows.push(row);
           } else {
             intermediateBoard[row][col].values.push(cellValue);
           }
@@ -205,6 +214,7 @@ export const moveOnBoard = (
           if (canCombine(cellValue, rightCellValue)) {
             intermediateBoard[row][col + 1].values.push(cellValue);
             board[row][col].value = 0;
+            movedRows.push(row);
           } else {
             intermediateBoard[row][col].values.push(cellValue);
           }
@@ -226,6 +236,7 @@ export const moveOnBoard = (
           if (canCombine(cellValue, upCellValue)) {
             intermediateBoard[row - 1][col].values.push(cellValue);
             board[row][col].value = 0;
+            movedCols.push(col);
           } else {
             intermediateBoard[row][col].values.push(cellValue);
           }
@@ -249,6 +260,7 @@ export const moveOnBoard = (
           if (canCombine(cellValue, downCellValue)) {
             intermediateBoard[row + 1][col].values.push(cellValue);
             board[row][col].value = 0;
+            movedCols.push(col);
           } else {
             intermediateBoard[row][col].values.push(cellValue);
           }
@@ -281,7 +293,12 @@ export const moveOnBoard = (
     }
   }
 
-  return { board: newBoard, merged, score: moveScore };
+  return {
+    board: newBoard,
+    merged,
+    score: moveScore,
+    moved: { cols: movedCols, rows: movedRows },
+  };
 };
 
 /**
