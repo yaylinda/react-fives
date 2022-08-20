@@ -25,6 +25,8 @@ export interface GameState {
   closeGameOverDialog: () => void;
 }
 
+// TODO - load game state storage and save to local storage
+
 const useGameStore = create<GameState>()((set) => ({
   hasStarted: false,
   board: initBoard(),

@@ -5,9 +5,39 @@ import { colors } from "./theme";
 function GameButtons() {
   const { hasStarted, isGameOver, newGame } = useGameStore();
 
-  if (!(!hasStarted || isGameOver)) {
-    return null;
-  }
+  /**
+   *
+   * @returns
+   */
+  const renderPrePostGameButtons = () => {
+    return (
+      <Button
+        variant="contained"
+        onClick={newGame}
+        sx={{ color: colors.LIGHT }}
+      >
+        <Typography>New Game</Typography>
+      </Button>
+    );
+  };
+
+  /**
+   *
+   * @returns
+   */
+  const renderInGameButtons = () => {
+    return (
+      <>
+        <Button
+          variant="outlined"
+          onClick={newGame}
+          sx={{ color: colors.LIGHT }}
+        >
+          <Typography>Restart</Typography>
+        </Button>
+      </>
+    );
+  };
 
   // TODO - button to restart game in the middle of a game
   return (
@@ -18,13 +48,9 @@ function GameButtons() {
         justifyContent: "center",
       }}
     >
-      <Button
-        variant="contained"
-        onClick={newGame}
-        sx={{ color: colors.LIGHT }}
-      >
-        <Typography>New Game</Typography>
-      </Button>
+      {!hasStarted || isGameOver
+        ? renderPrePostGameButtons()
+        : renderInGameButtons()}
     </Box>
   );
 }

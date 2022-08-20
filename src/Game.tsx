@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import Board from "./Board";
 import GameButtons from "./GameButtons";
-import useGameStore from "./gameStore";
 import StatsBar from "./StatsBar";
 import { colors } from "./theme";
 
@@ -10,8 +9,6 @@ import { colors } from "./theme";
  * @returns
  */
 function Game() {
-  const { hasStarted, isGameOver, newGame } = useGameStore();
-
   return (
     <Box
       sx={{
