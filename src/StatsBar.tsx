@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import useGameStore from "./gameStore";
-import Tile from "./Tile";
+import Tile, { PreviewTile } from "./Tile";
 
 function StatsBar() {
   const { hasStarted, moves, score, nextValue } = useGameStore();
@@ -28,7 +28,7 @@ function StatsBar() {
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
         <Typography sx={{ marginBottom: 1 }}>Next</Typography>
-        <Tile value={nextValue} hideValue />
+        <PreviewTile value={nextValue} />
       </Box>
       <Box>
         <Typography>Moves</Typography>

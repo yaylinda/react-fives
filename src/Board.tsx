@@ -27,7 +27,7 @@ function Board() {
         >
           {row.map((cell, c) => (
             <Box
-              key={`row_${r}_col_${c}`}
+              key={`row_${r}_col_${c}_val_${cell.value}`}
               sx={{
                 height: 50,
                 width: 50,
@@ -35,7 +35,7 @@ function Board() {
                 borderRadius: "50%",
               }}
             >
-              <Tile value={cell.value} />
+              <Tile {...cell} />
             </Box>
           ))}
         </Box>

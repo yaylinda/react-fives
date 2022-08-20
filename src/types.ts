@@ -7,6 +7,8 @@ export enum MoveDirection {
 
 export interface CellData {
   value: number;
+  isNew: boolean;
+  isMerge: boolean;
 }
 
 export interface IntermediateCellData {

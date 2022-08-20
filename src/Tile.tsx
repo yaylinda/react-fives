@@ -3,6 +3,8 @@ import { Box } from "@mui/material";
 import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
 import { START_NUM_2, START_NUM_3 } from "./utils";
+import { useEffect, useState } from "react";
+import useGameStore from "./gameStore";
 
 /**
  * Font sizes
@@ -119,40 +121,54 @@ const SMALL_TILE_WITH_BORDER = {
   borderWidth: 4,
 };
 
+const getCommonStyles = (value: number) => {
+  return [DEFAULT, STYLES[`tile_${value}`]];
+};
+
 /**
  * Tile
  *
  * @param param0
  * @returns
  */
-function Tile({
-  value,
-  hideValue = false,
-}: {
-  value: number;
-  hideValue?: boolean;
-}) {
+function Tile({ value, isNew, isMerge }: CellData) {
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    if (isNew || isMerge) {
+      setScale(1.1);
+      setTimeout(() => setScale(1), 100);
+    }
+  }, []);
+
   if (!value) {
     return null;
   }
 
-  const styles = [DEFAULT, STYLES[`tile_${value}`]];
+  const animationStyle = { transform: `scale(${scale})` };
 
-  const allStyles = () => {
-    if (!hideValue) {
-      return styles;
-    }
-
-    if (value === START_NUM_2 || value === START_NUM_3) {
-      styles.push(SMALL_TILE_WITHOUT_BORDER);
-    } else {
-      styles.push(SMALL_TILE_WITH_BORDER);
-    }
-
-    return styles;
-  };
-
-  return <Box sx={allStyles()}>{!hideValue && value}</Box>;
+  return (
+    <Box sx={[DEFAULT, STYLES[`tile_${value}`], animationStyle]}>{value}</Box>
+  );
 }
+
+/**
+ *
+ * @param param0
+ * @returns
+ */
+export const PreviewTile = ({ value }: { value: number }) => {
+  const isStartNum = value === START_NUM_2 || value === START_NUM_3;
+
+  return (
+    <Box
+      sx={[
+        DEFAULT,
+        STYLES[`tile_${value}`],
+        isStartNum ? SMALL_TILE_WITHOUT_BORDER : SMALL_TILE_WITH_BORDER,
+      ]}
+    ></Box>
+  );
+};
 
 export default Tile;

@@ -47,6 +47,12 @@ function App() {
 
   // TODO - implement a help dialog
 
+  // TODO - implement a configurations option for num rows/cells, gen distro
+
+  // TODO - implement personal achievements
+
+  // TODO - implement online high score
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" sx={{ color: colors.LIGHT }}>

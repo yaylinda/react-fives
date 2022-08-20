@@ -31,11 +31,11 @@ function GameOverDialog() {
     score,
     merged,
     generated,
-    move,
     newGame,
     closeGameOverDialog,
   } = useGameStore();
 
+  // TODO - show bar chart or some cool visualization of merged/generated
   return (
     <Dialog
       className="dialog"

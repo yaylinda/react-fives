@@ -40,7 +40,11 @@ export const convertKeyCodeToDirection = (
  */
 export const initBoard = (): CellData[][] => {
   return Array.from(Array(NUM_ROWS)).map((_, r) =>
-    Array.from(Array(NUM_COLS)).map((_, c) => ({ value: 0 }))
+    Array.from(Array(NUM_COLS)).map((_, c) => ({
+      value: 0,
+      isNew: false,
+      isMerge: false,
+    }))
   );
 };
 
@@ -335,6 +339,7 @@ export const moveOnBoard = (
           merged[cellTotal] = 0;
         }
         merged[cellTotal] = merged[cellTotal] + 1;
+        newBoard[row][col].isMerge = true;
       }
     }
   }

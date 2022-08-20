@@ -13,6 +13,7 @@ import {
 export interface GameState {
   hasStarted: boolean;
   board: CellData[][];
+  previousBoard: CellData[][];
   isGameOver: boolean;
   showGameOverDialog: boolean;
   score: number;
@@ -23,12 +24,14 @@ export interface GameState {
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
+  getPreviousValue: (row: number, col: number) => number;
 }
 
 // TODO - load game state storage and save to local storage
 
-const useGameStore = create<GameState>()((set) => ({
+const useGameStore = create<GameState>()((set, get) => ({
   hasStarted: false,
+  previousBoard: initBoard(),
   board: initBoard(),
   isGameOver: false,
   showGameOverDialog: false,
@@ -49,7 +52,10 @@ const useGameStore = create<GameState>()((set) => ({
         return state;
       }
 
-      const { board, merged, score, moved } = moveOnBoard(state.board, dir);
+      const { board, merged, score, moved } = moveOnBoard(
+        JSON.parse(JSON.stringify(state.board)),
+        dir
+      );
 
       let usedNextValue = false;
       let moves = state.moves;
@@ -57,7 +63,11 @@ const useGameStore = create<GameState>()((set) => ({
       if (coords != null) {
         usedNextValue = true;
         const newValue = state.nextValue;
-        board[coords.row][coords.col] = { value: newValue };
+        board[coords.row][coords.col] = {
+          value: newValue,
+          isNew: true,
+          isMerge: false,
+        };
 
         if (!state.generated[newValue]) {
           state.generated[newValue] = 0;
@@ -79,6 +89,7 @@ const useGameStore = create<GameState>()((set) => ({
       return {
         ...state,
         board: [...board],
+        previousBoard: [...state.board],
         isGameOver: gameOver,
         showGameOverDialog: gameOver,
         moves: moves,
@@ -103,11 +114,12 @@ const useGameStore = create<GameState>()((set) => ({
       const col = randomCol();
 
       const newValue = randomCellValue({}, {}, 0);
-      board[row][col] = { value: newValue };
+      board[row][col] = { value: newValue, isNew: true, isMerge: false };
 
       return {
         ...state,
         board: board,
+        previousBoard: [...state.board],
         hasStarted: true,
         isGameOver: false,
         showGameOverDialog: false,
@@ -125,6 +137,15 @@ const useGameStore = create<GameState>()((set) => ({
    */
   closeGameOverDialog: () =>
     set((state) => ({ ...state, showGameOverDialog: false })),
+
+  /**
+   *
+   * @param row
+   * @param col
+   * @returns
+   */
+  getPreviousValue: (row: number, col: number): number =>
+    get().previousBoard[row][col].value,
 }));
 
 export default useGameStore;
