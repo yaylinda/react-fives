@@ -18,7 +18,7 @@ function Game() {
         width: 270,
         marginRight: "auto",
         marginLeft: "auto",
-        marginTop: 5,
+        marginTop: 3,
       }}
     >
       <StatsBar />

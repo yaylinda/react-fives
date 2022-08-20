@@ -18,6 +18,12 @@ const theme = createTheme({
     primary: {
       main: colors.BRAND,
     },
+    secondary: {
+      main: colors.ACCENT,
+    },
+    info: {
+      main: colors.LIGHT,
+    },
   },
 });
 

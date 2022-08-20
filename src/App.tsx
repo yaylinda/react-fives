@@ -43,15 +43,15 @@ function App() {
     };
   }, [throttledHandleKeyDown]);
 
-  // TODO - if on mobile, implement swipe, or virtual keyboard
+  // TODO - if on mobile, implement swipe
 
   // TODO - implement a help dialog
 
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" sx={{ color: colors.LIGHT }}>
-        <Toolbar>
-          <Typography sx={{ fontSize: 40, textAlign: "center", flexGrow: 1 }}>
+        <Toolbar variant="dense">
+          <Typography sx={{ fontSize: 30, textAlign: "center", flexGrow: 1 }}>
             Fives
           </Typography>
         </Toolbar>
