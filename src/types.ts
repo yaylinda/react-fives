@@ -5,7 +5,8 @@ export enum MoveDirection {
   RIGHT = "RIGHT",
 }
 
-export interface CellData {
+export interface TileData {
+  id: string;
   value: number;
   isNew: boolean;
   isMerge: boolean;
@@ -13,4 +14,19 @@ export interface CellData {
 
 export interface IntermediateCellData {
   values: number[];
+}
+
+export type TileLocations = {
+  byId: {
+    [tileId in string]: {
+      current: Coordinates | null;
+      previous: Coordinates | null;
+    };
+  };
+  byCoordinates: { [coordString in string]: string };
+};
+
+export interface Coordinates {
+  row: number;
+  col: number;
 }

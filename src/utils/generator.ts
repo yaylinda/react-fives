@@ -1,21 +1,21 @@
-import { sum, shuffle } from "lodash";
+import { shuffle, sum } from "lodash";
 import {
   MERGABLES,
+  STARTING_NUMS,
   START_NUM_2,
   START_NUM_3,
   START_NUM_DIFF_THRESHOLD,
-  STARTING_NUMS,
 } from "./constants";
 
 /**
  *
  * @returns
  */
-export const randomCellValue = (
+export const generateTileValue = (
   merged: { [key in number]: number },
   generated: { [key in number]: number },
   moves: number
-) => {
+): number => {
   // At the beginning of the game, randomly return 2 or 3
   if (Object.keys(merged).length === 0) {
     return randomStartingNum(generated);

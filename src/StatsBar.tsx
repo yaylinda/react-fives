@@ -3,7 +3,7 @@ import useGameStore from "./stores/gameStore";
 import { PreviewTile } from "./Tile";
 
 function StatsBar() {
-  const { hasStarted, moves, score, nextValue } = useGameStore();
+  const { hasStarted, moves, score, nextValue: nextValue } = useGameStore();
 
   if (!hasStarted) {
     return null;

@@ -1,4 +1,4 @@
-import { CellData } from "./types";
+import { TileData } from "./types";
 import { Box } from "@mui/material";
 import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
@@ -120,17 +120,13 @@ const SMALL_TILE_WITH_BORDER = {
   borderWidth: 4,
 };
 
-const getCommonStyles = (value: number) => {
-  return [DEFAULT, STYLES[`tile_${value}`]];
-};
-
 /**
  * Tile
  *
  * @param param0
  * @returns
  */
-function Tile({ value, isNew, isMerge }: CellData) {
+function Tile({ value, isNew, isMerge }: TileData) {
   const [scale, setScale] = useState(1);
 
   useEffect(() => {

@@ -1,5 +1,10 @@
 import { sum } from "lodash";
-import { CellData, MoveDirection, IntermediateCellData } from "../types";
+import {
+  TileData,
+  MoveDirection,
+  IntermediateCellData,
+  TileLocations,
+} from "../types";
 import { NUM_ROWS, NUM_COLS, START_NUM_2, START_NUM_3 } from "./constants";
 import { initBoard } from "./utils";
 
@@ -10,10 +15,10 @@ import { initBoard } from "./utils";
  * @returns
  */
 export const moveOnBoard = (
-  board: CellData[][],
+  board: TileData[][],
   dir: MoveDirection
 ): {
-  board: CellData[][];
+  board: TileData[][];
   merged: { [key in number]: number };
   score: number;
   moved: { rows: number[]; cols: number[] };

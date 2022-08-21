@@ -1,18 +1,16 @@
 import create from "zustand";
-import { CellData, MoveDirection } from "../types";
+import { TileData, MoveDirection, TileLocations } from "../types";
 import { NUM_ROWS, NUM_COLS } from "../utils/constants";
-import { randomCellValue } from "../utils/generator";
+import { getCoordinatesForNewTile } from "../utils/coordinates";
+import { generateTileValue } from "../utils/generator";
+import { convertBoardToLocations } from "../utils/locations";
 import { moveOnBoard } from "../utils/mover";
-import {
-  getCoordinatesForNewCell,
-  initBoard,
-  isGameOver,
-} from "../utils/utils";
+import { initBoard, isGameOver } from "../utils/utils";
 
 export interface GameState {
   hasStarted: boolean;
-  board: CellData[][];
-  previousBoard: CellData[][];
+  board: TileData[][];
+  tileLocations: TileLocations;
   isGameOver: boolean;
   showGameOverDialog: boolean;
   score: number;
@@ -23,15 +21,17 @@ export interface GameState {
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
-  getPreviousValue: (row: number, col: number) => number;
 }
 
 // TODO - load game state storage and save to local storage
 
 const useGameStore = create<GameState>()((set, get) => ({
   hasStarted: false,
-  previousBoard: initBoard(),
   board: initBoard(),
+  tileLocations: {
+    byId: {},
+    byCoordinates: {},
+  },
   isGameOver: false,
   showGameOverDialog: false,
   score: 0,
@@ -51,18 +51,33 @@ const useGameStore = create<GameState>()((set, get) => ({
         return state;
       }
 
+      // Make a copy of the previous board. Used to generate the "old" tile locations.
+      const previousBoardCopy = JSON.parse(JSON.stringify(state.board));
+
+      // Move the tiles on the board.
       const { board, merged, score, moved } = moveOnBoard(
         JSON.parse(JSON.stringify(state.board)),
         dir
       );
 
+      // Update the count of the tiles that got merged.
+      for (let key in merged) {
+        if (!state.merged[key]) {
+          state.merged[key] = 0;
+        }
+        state.merged[key] = state.merged[key] + merged[key];
+      }
+
+      // Put a new tile on the board (if applicable).
       let usedNextValue = false;
       let moves = state.moves;
-      const coords = getCoordinatesForNewCell(board, dir, moved);
+      const coords = getCoordinatesForNewTile(board, dir, moved);
       if (coords != null) {
+        moves = moves + 1;
         usedNextValue = true;
         const newValue = state.nextValue;
         board[coords.row][coords.col] = {
+          id: `tile_${moves}`,
           value: newValue,
           isNew: true,
           isMerge: false,
@@ -72,23 +87,16 @@ const useGameStore = create<GameState>()((set, get) => ({
           state.generated[newValue] = 0;
         }
         state.generated[newValue] = state.generated[newValue] + 1;
-
-        moves = moves + 1;
       }
 
+      // Check if game is over.
       const gameOver = isGameOver(board);
 
-      for (let key in merged) {
-        if (!state.merged[key]) {
-          state.merged[key] = 0;
-        }
-        state.merged[key] = state.merged[key] + merged[key];
-      }
-
+      // Return the updated state.
       return {
         ...state,
         board: [...board],
-        previousBoard: [...state.board],
+        tileLocations: convertBoardToLocations(previousBoardCopy, board),
         isGameOver: gameOver,
         showGameOverDialog: gameOver,
         moves: moves,
@@ -96,7 +104,7 @@ const useGameStore = create<GameState>()((set, get) => ({
         merged: { ...state.merged },
         generated: { ...state.generated },
         nextValue: usedNextValue
-          ? randomCellValue(state.merged, state.generated, moves)
+          ? generateTileValue(state.merged, state.generated, moves)
           : state.nextValue,
       };
     }),
@@ -109,8 +117,9 @@ const useGameStore = create<GameState>()((set, get) => ({
     set((state) => {
       const board = initBoard();
 
-      const newValue = randomCellValue({}, {}, 0);
+      const newValue = generateTileValue({}, {}, 0);
       board[(NUM_ROWS - 1) / 2][(NUM_COLS - 1) / 2] = {
+        id: `tile_${state.moves}`,
         value: newValue,
         isNew: true,
         isMerge: false,
@@ -119,7 +128,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       return {
         ...state,
         board: board,
-        previousBoard: [...state.board],
+        tileLocations: convertBoardToLocations(state.board, board),
         hasStarted: true,
         isGameOver: false,
         showGameOverDialog: false,
@@ -127,7 +136,7 @@ const useGameStore = create<GameState>()((set, get) => ({
         moves: 0,
         merged: {},
         generated: {},
-        nextValue: randomCellValue({}, {}, 0),
+        nextValue: generateTileValue({}, {}, 0),
       };
     }),
 
@@ -137,15 +146,6 @@ const useGameStore = create<GameState>()((set, get) => ({
    */
   closeGameOverDialog: () =>
     set((state) => ({ ...state, showGameOverDialog: false })),
-
-  /**
-   *
-   * @param row
-   * @param col
-   * @returns
-   */
-  getPreviousValue: (row: number, col: number): number =>
-    get().previousBoard[row][col].value,
 }));
 
 export default useGameStore;

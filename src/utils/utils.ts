@@ -1,5 +1,4 @@
-import { CellData, MoveDirection } from "../types";
-import { shuffle } from "lodash";
+import { TileData, MoveDirection, Coordinates } from "../types";
 import { NUM_ROWS, NUM_COLS } from "./constants";
 import { moveOnBoard } from "./mover";
 
@@ -29,9 +28,10 @@ export const convertKeyCodeToDirection = (
  *
  * @returns
  */
-export const initBoard = (): CellData[][] => {
+export const initBoard = (): TileData[][] => {
   return Array.from(Array(NUM_ROWS)).map((_, r) =>
     Array.from(Array(NUM_COLS)).map((_, c) => ({
+      id: "",
       value: 0,
       isNew: false,
       isMerge: false,
@@ -41,81 +41,11 @@ export const initBoard = (): CellData[][] => {
 
 /**
  *
- * @param dir
+ * @param param0
  * @returns
  */
-export const getCoordinatesForNewCell = (
-  board: CellData[][],
-  dir: MoveDirection,
-  moved: { cols: number[]; rows: number[] }
-): { col: number; row: number } | null => {
-  switch (dir) {
-    case MoveDirection.LEFT: {
-      const values = [];
-      for (let row = 0; row < NUM_ROWS; row++) {
-        values.push(board[row][NUM_COLS - 1].value);
-      }
-
-      const emptyIndices = getEmptyIndices(values);
-      if (emptyIndices.length === 0) {
-        return null;
-      }
-
-      const index = shuffle(moved.rows)[0];
-      return { col: NUM_COLS - 1, row: index };
-    }
-    case MoveDirection.RIGHT: {
-      const values = [];
-      for (let row = 0; row < NUM_ROWS; row++) {
-        values.push(board[row][0].value);
-      }
-
-      const emptyIndices = getEmptyIndices(values);
-      if (emptyIndices.length === 0) {
-        return null;
-      }
-
-      const index = shuffle(moved.rows)[0];
-      return { col: 0, row: index };
-    }
-    case MoveDirection.UP: {
-      const values = [];
-      for (let col = 0; col < NUM_COLS; col++) {
-        values.push(board[NUM_ROWS - 1][col].value);
-      }
-
-      const emptyIndices = getEmptyIndices(values);
-      if (emptyIndices.length === 0) {
-        return null;
-      }
-
-      const index = shuffle(moved.cols)[0];
-      return { col: index, row: NUM_ROWS - 1 };
-    }
-    case MoveDirection.DOWN: {
-      const values = [];
-      for (let col = 0; col < NUM_COLS; col++) {
-        values.push(board[0][col].value);
-      }
-
-      const emptyIndices = getEmptyIndices(values);
-      if (emptyIndices.length === 0) {
-        return null;
-      }
-
-      const index = shuffle(moved.cols)[0];
-      return { col: index, row: 0 };
-    }
-  }
-};
-
-/**
- *
- * @param values
- * @returns
- */
-const getEmptyIndices = (values: number[]) => {
-  return values.map((v, i) => (v === 0 ? i : -1)).filter((i) => i !== -1);
+export const coordinatesHash = ({ row, col }: Coordinates): string => {
+  return `r_${row}_c_${col}`;
 };
 
 /**
@@ -123,7 +53,7 @@ const getEmptyIndices = (values: number[]) => {
  * @param board
  * @returns
  */
-export const isGameOver = (board: CellData[][]): boolean => {
+export const isGameOver = (board: TileData[][]): boolean => {
   const boardFull = isBoardFull(board);
 
   if (!boardFull) {
@@ -157,7 +87,7 @@ export const isGameOver = (board: CellData[][]): boolean => {
  * @param board
  * @returns
  */
-const isBoardFull = (board: CellData[][]): boolean => {
+const isBoardFull = (board: TileData[][]): boolean => {
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
       if (board[row][col].value === 0) {
@@ -174,7 +104,7 @@ const isBoardFull = (board: CellData[][]): boolean => {
  * @param board2
  * @returns
  */
-const isSame = (board1: CellData[][], board2: CellData[][]): boolean => {
+const isSame = (board1: TileData[][], board2: TileData[][]): boolean => {
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
       if (board1[row][col].value !== board2[row][col].value) {
