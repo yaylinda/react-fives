@@ -140,7 +140,7 @@ interface TileProps {
  * @returns
  */
 function Tile({ tile, coordinates }: TileProps) {
-  const { value, isNew, isMerge } = tile;
+  const { id, value, isNew, isMerge } = tile;
   const { top, left } = getPixelsFromCoordinates(coordinates);
 
   const [scale, setScale] = useState(1);
@@ -150,24 +150,26 @@ function Tile({ tile, coordinates }: TileProps) {
       setScale(1.1);
       setTimeout(() => setScale(1), 100);
     }
-  }, []);
-
-  if (!value) {
-    return null;
-  }
-
-  const animationStyle = { transform: `scale(${scale})` };
+  }, [isNew, isMerge]);
 
   return (
     <Box
       sx={[
         DEFAULT,
         STYLES[`tile_${value}`],
-        animationStyle,
-        { position: "absolute", top, left },
+        {
+          position: "absolute",
+          top,
+          left,
+          transform: `scale(${scale})`,
+          transitionProperty: "left, top, transform",
+          transitionDuration: "250ms, 250ms, 100ms",
+          fontSize: 12,
+        },
       ]}
     >
       {value}
+      {id}
     </Box>
   );
 }

@@ -1,6 +1,7 @@
-import { TileData, MoveDirection } from "../types";
+import { TileData, MoveDirection, IntermediateTileData } from "../types";
 import { NUM_ROWS, NUM_COLS } from "./constants";
-import { moveOnBoard } from "./mover";
+import { mergeTiles } from "./merger";
+import { moveTiles } from "./mover";
 
 /**
  *
@@ -43,14 +44,9 @@ export const initBoard = (): TileData[][] => {
  *
  * @returns
  */
-export const resetBoard = (board: TileData[][]): TileData[][] => {
+export const initIntermediateBoard = (): IntermediateTileData[][] => {
   return Array.from(Array(NUM_ROWS)).map((_, r) =>
-    Array.from(Array(NUM_COLS)).map((_, c) => ({
-      id: board[r][c].id,
-      value: board[r][c].value,
-      isNew: false,
-      isMerge: false,
-    }))
+    Array.from(Array(NUM_COLS)).map((_, c) => ({ tiles: [] }))
   );
 };
 
@@ -66,26 +62,25 @@ export const isGameOver = (board: TileData[][]): boolean => {
     return false;
   }
 
-  const left = moveOnBoard(
-    JSON.parse(JSON.stringify(board)),
-    MoveDirection.LEFT
-  );
-  const right = moveOnBoard(
-    JSON.parse(JSON.stringify(board)),
-    MoveDirection.RIGHT
-  );
-  const up = moveOnBoard(JSON.parse(JSON.stringify(board)), MoveDirection.UP);
-  const down = moveOnBoard(
-    JSON.parse(JSON.stringify(board)),
-    MoveDirection.DOWN
-  );
+  const left = moveAndMerge(board, MoveDirection.LEFT);
+  const right = moveAndMerge(board, MoveDirection.RIGHT);
+  const up = moveAndMerge(board, MoveDirection.UP);
+  const down = moveAndMerge(board, MoveDirection.DOWN);
 
   return [
-    isSame(board, left.board),
-    isSame(board, right.board),
-    isSame(board, up.board),
-    isSame(board, down.board),
+    isSame(board, left),
+    isSame(board, right),
+    isSame(board, up),
+    isSame(board, down),
   ].every((v) => v);
+};
+
+const moveAndMerge = (
+  board: TileData[][],
+  dir: MoveDirection
+): TileData[][] => {
+  const { intermediateBoard } = moveTiles(board, dir);
+  return mergeTiles(intermediateBoard).board;
 };
 
 /**

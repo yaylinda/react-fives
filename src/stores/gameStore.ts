@@ -4,8 +4,9 @@ import { NUM_ROWS, NUM_COLS } from "../utils/constants";
 import { getCoordinatesForNewTile } from "../utils/coordinates";
 import { generateTileValue } from "../utils/generator";
 import { convertBoardToLocations } from "../utils/locations";
-import { moveOnBoard } from "../utils/mover";
-import { initBoard, isGameOver } from "../utils/utils";
+import { mergeTiles } from "../utils/merger";
+import { moveTiles } from "../utils/mover";
+import { initBoard, initIntermediateBoard, isGameOver } from "../utils/utils";
 
 export interface GameState {
   hasStarted: boolean;
@@ -28,10 +29,7 @@ export interface GameState {
 const useGameStore = create<GameState>()((set, get) => ({
   hasStarted: false,
   board: initBoard(),
-  tileLocations: {
-    byId: {},
-    byCoordinates: {},
-  },
+  tileLocations: {},
   isGameOver: false,
   showGameOverDialog: false,
   score: 0,
@@ -51,14 +49,10 @@ const useGameStore = create<GameState>()((set, get) => ({
         return state;
       }
 
-      // Make a copy of the previous board. Used to generate the "old" tile locations.
-      const previousBoardCopy = JSON.parse(JSON.stringify(state.board));
-
-      // Move the tiles on the board.
-      const { board, merged, score, moved } = moveOnBoard(
-        JSON.parse(JSON.stringify(state.board)),
-        dir
-      );
+      // Move and merge the tiles. Update tile locations.
+      const { intermediateBoard, moved } = moveTiles(state.board, dir);
+      const { board, merged, score } = mergeTiles(intermediateBoard);
+      const tileLocations = convertBoardToLocations(board, intermediateBoard);
 
       // Update the count of the tiles that got merged.
       for (let key in merged) {
@@ -96,7 +90,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       return {
         ...state,
         board: [...board],
-        tileLocations: convertBoardToLocations(previousBoardCopy, board),
+        tileLocations,
         isGameOver: gameOver,
         showGameOverDialog: gameOver,
         moves: moves,
@@ -119,7 +113,7 @@ const useGameStore = create<GameState>()((set, get) => ({
 
       const newValue = generateTileValue({}, {}, 0);
       board[(NUM_ROWS - 1) / 2][(NUM_COLS - 1) / 2] = {
-        id: `tile_${state.moves}`,
+        id: `tile_${0}`,
         value: newValue,
         isNew: true,
         isMerge: false,
@@ -128,7 +122,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       return {
         ...state,
         board: board,
-        tileLocations: convertBoardToLocations(state.board, board),
+        tileLocations: convertBoardToLocations(board, initIntermediateBoard()),
         hasStarted: true,
         isGameOver: false,
         showGameOverDialog: false,

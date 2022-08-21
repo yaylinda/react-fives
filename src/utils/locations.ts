@@ -1,4 +1,9 @@
-import { Coordinates, TileData, TileLocations } from "../types";
+import {
+  Coordinates,
+  IntermediateTileData,
+  TileData,
+  TileLocations,
+} from "../types";
 import { NUM_COLS, NUM_ROWS } from "./constants";
 
 /**
@@ -8,27 +13,23 @@ import { NUM_COLS, NUM_ROWS } from "./constants";
  * @returns
  */
 export const convertBoardToLocations = (
-  previousBoard: TileData[][],
-  currentBoard: TileData[][]
+  currentBoard: TileData[][],
+  intermediateBoard: IntermediateTileData[][]
 ): TileLocations => {
-  let tileLocations: TileLocations = {
-    byId: {},
-  };
+  let tileLocations: TileLocations = {};
 
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
       const coords: Coordinates = { row, col };
-      tileLocations = addTileLocation(
-        coords,
-        previousBoard[row][col],
-        tileLocations,
-        "previous"
-      );
+
+      intermediateBoard[row][col].tiles.forEach((tile) => {
+        tileLocations = addTileLocation(coords, tile, tileLocations);
+      });
+
       tileLocations = addTileLocation(
         coords,
         currentBoard[row][col],
-        tileLocations,
-        "current"
+        tileLocations
       );
     }
   }
@@ -47,21 +48,17 @@ export const convertBoardToLocations = (
 const addTileLocation = (
   coordinates: Coordinates,
   tile: TileData,
-  tileLocations: TileLocations,
-  curOrPrevKey: "current" | "previous"
+  tileLocations: TileLocations
 ): TileLocations => {
   if (!tile.id) {
     return tileLocations;
   }
 
-  if (!tileLocations.byId[tile.id]) {
-    tileLocations.byId[tile.id] = {
-      previous: null,
-      current: null,
-    };
+  if (!tileLocations[tile.id]) {
+    tileLocations[tile.id] = null;
   }
 
-  tileLocations.byId[tile.id][curOrPrevKey] = {
+  tileLocations[tile.id] = {
     tile,
     coordinates,
   };

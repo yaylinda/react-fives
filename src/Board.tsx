@@ -7,9 +7,11 @@ import { NUM_COLS, NUM_ROWS } from "./utils/constants";
 function Board() {
   const { tileLocations } = useGameStore();
 
-  const tileIds = Object.keys(tileLocations.byId).filter(
-    (tileId) => tileLocations.byId[tileId].current != null
-  );
+  // const tileIds = Object.keys(tileLocations.byId).filter(
+  //   (tileId) => tileLocations.byId[tileId] != null
+  // );
+
+  console.log(`[Board] tileLocations=${JSON.stringify(tileLocations)}`);
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -37,12 +39,11 @@ function Board() {
           </Box>
         ))}
       </Box>
-      {tileIds.map((tileId) => {
-        const tileData = tileLocations.byId[tileId].current;
-        if (!tileData) {
+      {Object.values(tileLocations).map((tile) => {
+        if (!tile) {
           return null;
         }
-        return <Tile key={JSON.stringify(tileData)} {...tileData} />;
+        return <Tile key={tile.tile.id} {...tile} />;
       })}
     </Box>
   );

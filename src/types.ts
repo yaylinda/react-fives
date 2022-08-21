@@ -17,18 +17,10 @@ export interface IntermediateTileData {
 }
 
 export type TileLocations = {
-  byId: {
-    [tileId in string]: {
-      current: {
-        tile: TileData;
-        coordinates: Coordinates;
-      } | null;
-      previous: {
-        tile: TileData;
-        coordinates: Coordinates;
-      } | null;
-    };
-  };
+  [tileId in string]: {
+    tile: TileData;
+    coordinates: Coordinates;
+  } | null;
 };
 
 export interface Coordinates {
