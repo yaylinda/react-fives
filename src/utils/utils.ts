@@ -41,6 +41,21 @@ export const initBoard = (): TileData[][] => {
 
 /**
  *
+ * @returns
+ */
+export const resetBoard = (board: TileData[][]): TileData[][] => {
+  return Array.from(Array(NUM_ROWS)).map((_, r) =>
+    Array.from(Array(NUM_COLS)).map((_, c) => ({
+      id: board[r][c].id,
+      value: board[r][c].value,
+      isNew: false,
+      isMerge: false,
+    }))
+  );
+};
+
+/**
+ *
  * @param board
  * @returns
  */

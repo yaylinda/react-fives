@@ -12,8 +12,8 @@ export interface TileData {
   isMerge: boolean;
 }
 
-export interface IntermediateCellData {
-  values: number[];
+export interface IntermediateTileData {
+  tiles: TileData[];
 }
 
 export type TileLocations = {
