@@ -1,4 +1,11 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import useGameStore from "./gameStore";
 import { colors } from "./theme";
 import { MoveDirection } from "./types";
@@ -6,6 +13,8 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useState } from "react";
+import DialogTransition from "./DialogTransition";
 
 /**
  *
@@ -40,7 +49,13 @@ const OnScreenKey = ({ dir }: { dir: MoveDirection }) => {
   );
 };
 
+/**
+ *
+ * @returns
+ */
 function GameButtons() {
+  const [showConfirmRestartDialog, setShowConfirmRestartDialog] =
+    useState<boolean>(false);
   const { hasStarted, isGameOver, newGame } = useGameStore();
 
   /**
@@ -84,13 +99,21 @@ function GameButtons() {
         <Button
           size="large"
           variant="outlined"
-          onClick={newGame}
+          onClick={() => setShowConfirmRestartDialog(true)}
           sx={{ borderWidth: 2, color: colors.LIGHT }}
         >
           <Typography>Restart</Typography>
         </Button>
       </Box>
     );
+  };
+
+  /**
+   *
+   */
+  const restart = () => {
+    setShowConfirmRestartDialog(false);
+    newGame();
   };
 
   return (
@@ -104,6 +127,19 @@ function GameButtons() {
       {!hasStarted || isGameOver
         ? renderPrePostGameButtons()
         : renderInGameButtons()}
+      <Dialog
+        open={showConfirmRestartDialog}
+        TransitionComponent={DialogTransition}
+        keepMounted
+        onClose={() => setShowConfirmRestartDialog(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Restart?</DialogTitle>
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={() => setShowConfirmRestartDialog(false)}>No</Button>
+          <Button onClick={restart}>Yes</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

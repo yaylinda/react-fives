@@ -6,7 +6,7 @@ import Tile from "./Tile";
 function Board() {
   const { board } = useGameStore();
 
-  // TODO - animations on board when tiles move and merge
+  // TODO - animations on board when tiles move
 
   return (
     <Box
@@ -27,7 +27,7 @@ function Board() {
         >
           {row.map((cell, c) => (
             <Box
-              key={`row_${r}_col_${c}_val_${cell.value}`}
+              key={`row_${r}_col_${c}_val_${cell.value}_isNew_${cell.isNew}`}
               sx={{
                 height: 50,
                 width: 50,

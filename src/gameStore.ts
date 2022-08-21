@@ -5,9 +5,9 @@ import {
   initBoard,
   isGameOver,
   moveOnBoard,
+  NUM_COLS,
+  NUM_ROWS,
   randomCellValue,
-  randomCol,
-  randomRow,
 } from "./utils";
 
 export interface GameState {
@@ -110,11 +110,12 @@ const useGameStore = create<GameState>()((set, get) => ({
     set((state) => {
       const board = initBoard();
 
-      const row = randomRow();
-      const col = randomCol();
-
       const newValue = randomCellValue({}, {}, 0);
-      board[row][col] = { value: newValue, isNew: true, isMerge: false };
+      board[(NUM_ROWS - 1) / 2][(NUM_COLS - 1) / 2] = {
+        value: newValue,
+        isNew: true,
+        isMerge: false,
+      };
 
       return {
         ...state,

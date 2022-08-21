@@ -5,24 +5,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide,
   Typography,
 } from "@mui/material";
-import { TransitionProps } from "@mui/material/transitions";
-import React from "react";
+import DialogTransition from "./DialogTransition";
 import useGameStore from "./gameStore";
-
-/**
- *
- */
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement<any, any>;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 function GameOverDialog() {
   const {
@@ -38,9 +24,8 @@ function GameOverDialog() {
   // TODO - show bar chart or some cool visualization of merged/generated
   return (
     <Dialog
-      className="dialog"
       open={showGameOverDialog}
-      TransitionComponent={Transition}
+      TransitionComponent={DialogTransition}
       keepMounted
       onClose={closeGameOverDialog}
       aria-describedby="alert-dialog-slide-description"
