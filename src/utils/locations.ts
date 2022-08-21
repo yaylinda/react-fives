@@ -1,6 +1,5 @@
 import { Coordinates, TileData, TileLocations } from "../types";
 import { NUM_COLS, NUM_ROWS } from "./constants";
-import { coordinatesHash } from "./utils";
 
 /**
  *
@@ -14,7 +13,6 @@ export const convertBoardToLocations = (
 ): TileLocations => {
   let tileLocations: TileLocations = {
     byId: {},
-    byCoordinates: {},
   };
 
   for (let row = 0; row < NUM_ROWS; row++) {
@@ -40,14 +38,14 @@ export const convertBoardToLocations = (
 
 /**
  *
- * @param coords
+ * @param coordinates
  * @param tile
  * @param tileLocations
  * @param curOrPrevKey
  * @returns
  */
 const addTileLocation = (
-  coords: Coordinates,
+  coordinates: Coordinates,
   tile: TileData,
   tileLocations: TileLocations,
   curOrPrevKey: "current" | "previous"
@@ -55,7 +53,6 @@ const addTileLocation = (
   if (!tile.id) {
     return tileLocations;
   }
-  tileLocations.byCoordinates[coordinatesHash(coords)] = tile.id;
 
   if (!tileLocations.byId[tile.id]) {
     tileLocations.byId[tile.id] = {
@@ -64,7 +61,10 @@ const addTileLocation = (
     };
   }
 
-  tileLocations.byId[tile.id][curOrPrevKey] = tile;
+  tileLocations.byId[tile.id][curOrPrevKey] = {
+    tile,
+    coordinates,
+  };
 
   return tileLocations;
 };

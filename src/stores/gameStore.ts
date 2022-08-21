@@ -1,5 +1,5 @@
 import create from "zustand";
-import { TileData, MoveDirection, TileLocations } from "../types";
+import { TileData, MoveDirection, TileLocations, Coordinates } from "../types";
 import { NUM_ROWS, NUM_COLS } from "../utils/constants";
 import { getCoordinatesForNewTile } from "../utils/coordinates";
 import { generateTileValue } from "../utils/generator";

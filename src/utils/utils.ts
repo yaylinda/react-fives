@@ -41,15 +41,6 @@ export const initBoard = (): TileData[][] => {
 
 /**
  *
- * @param param0
- * @returns
- */
-export const coordinatesHash = ({ row, col }: Coordinates): string => {
-  return `r_${row}_c_${col}`;
-};
-
-/**
- *
  * @param board
  * @returns
  */

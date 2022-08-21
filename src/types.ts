@@ -19,11 +19,16 @@ export interface IntermediateCellData {
 export type TileLocations = {
   byId: {
     [tileId in string]: {
-      current: TileData | null;
-      previous: TileData | null;
+      current: {
+        tile: TileData;
+        coordinates: Coordinates;
+      } | null;
+      previous: {
+        tile: TileData;
+        coordinates: Coordinates;
+      } | null;
     };
   };
-  byCoordinates: { [coordString in string]: string };
 };
 
 export interface Coordinates {

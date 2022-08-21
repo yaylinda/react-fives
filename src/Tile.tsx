@@ -1,9 +1,10 @@
-import { TileData } from "./types";
+import { Coordinates, TileData } from "./types";
 import { Box } from "@mui/material";
 import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
 import { useEffect, useState } from "react";
 import { START_NUM_2, START_NUM_3 } from "./utils/constants";
+import { TimesOneMobiledata } from "@mui/icons-material";
 
 /**
  * Font sizes
@@ -120,13 +121,28 @@ const SMALL_TILE_WITH_BORDER = {
   borderWidth: 4,
 };
 
+const getPixelsFromCoordinates = ({ row, col }: Coordinates) => {
+  return {
+    top: row * 50 + row * 5,
+    left: col * 50 + col * 5,
+  };
+};
+
+interface TileProps {
+  tile: TileData;
+  coordinates: Coordinates;
+}
+
 /**
  * Tile
  *
  * @param param0
  * @returns
  */
-function Tile({ id, value, isNew, isMerge }: TileData) {
+function Tile({ tile, coordinates }: TileProps) {
+  const { value, isNew, isMerge } = tile;
+  const { top, left } = getPixelsFromCoordinates(coordinates);
+
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
@@ -143,7 +159,16 @@ function Tile({ id, value, isNew, isMerge }: TileData) {
   const animationStyle = { transform: `scale(${scale})` };
 
   return (
-    <Box sx={[DEFAULT, STYLES[`tile_${value}`], animationStyle]}>{value}</Box>
+    <Box
+      sx={[
+        DEFAULT,
+        STYLES[`tile_${value}`],
+        animationStyle,
+        { position: "absolute", top, left },
+      ]}
+    >
+      {value}
+    </Box>
   );
 }
 
