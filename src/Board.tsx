@@ -2,11 +2,16 @@ import { Box } from "@mui/material";
 import useGameStore from "./stores/gameStore";
 import { colors } from "./theme";
 import Tile from "./Tile";
+import { NUM_COLS, NUM_ROWS } from "./utils/constants";
 
 function Board() {
-  const { board } = useGameStore();
+  const { tileLocations } = useGameStore();
 
-  // TODO - animations on board when tiles move
+  const tileIds = Object.keys(tileLocations.byId).filter(
+    (tileId) => tileLocations.byId[tileId].current != null
+  );
+
+  console.log(`[Board] tileLocations=${JSON.stringify(tileLocations)}`);
 
   return (
     <Box
@@ -16,7 +21,7 @@ function Board() {
         gap: "5px",
       }}
     >
-      {board.map((row, r) => (
+      {Array.from(Array(NUM_ROWS)).map((_, r) => (
         <Box
           key={`row_${r}`}
           sx={{
@@ -25,21 +30,26 @@ function Board() {
             gap: "5px",
           }}
         >
-          {row.map((cell, c) => (
+          {Array.from(Array(NUM_COLS)).map((_, c) => (
             <Box
-              key={`row_${r}_col_${c}_val_${cell.value}_isNew_${cell.isNew}`}
+              key={`row_${r}_col_${c}`}
               sx={{
                 height: 50,
                 width: 50,
                 backgroundColor: colors.DARK,
                 borderRadius: "50%",
               }}
-            >
-              <Tile {...cell} />
-            </Box>
+            ></Box>
           ))}
         </Box>
       ))}
+      {tileIds.map((tileId) => {
+        const tileData = tileLocations.byId[tileId].current;
+        if (!tileData) {
+          return null;
+        }
+        return <Tile {...tileData} />;
+      })}
     </Box>
   );
 }

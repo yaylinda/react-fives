@@ -126,7 +126,7 @@ const SMALL_TILE_WITH_BORDER = {
  * @param param0
  * @returns
  */
-function Tile({ value, isNew, isMerge }: TileData) {
+function Tile({ id, value, isNew, isMerge }: TileData) {
   const [scale, setScale] = useState(1);
 
   useEffect(() => {

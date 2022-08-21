@@ -12,7 +12,7 @@ export const convertBoardToLocations = (
   previousBoard: TileData[][],
   currentBoard: TileData[][]
 ): TileLocations => {
-  const tileLocations: TileLocations = {
+  let tileLocations: TileLocations = {
     byId: {},
     byCoordinates: {},
   };
@@ -20,13 +20,18 @@ export const convertBoardToLocations = (
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
       const coords: Coordinates = { row, col };
-      addTileLocation(
+      tileLocations = addTileLocation(
         coords,
         previousBoard[row][col],
         tileLocations,
         "previous"
       );
-      addTileLocation(coords, currentBoard[row][col], tileLocations, "current");
+      tileLocations = addTileLocation(
+        coords,
+        currentBoard[row][col],
+        tileLocations,
+        "current"
+      );
     }
   }
 
@@ -46,9 +51,9 @@ const addTileLocation = (
   tile: TileData,
   tileLocations: TileLocations,
   curOrPrevKey: "current" | "previous"
-) => {
+): TileLocations => {
   if (!tile.id) {
-    return;
+    return tileLocations;
   }
   tileLocations.byCoordinates[coordinatesHash(coords)] = tile.id;
 
@@ -59,5 +64,7 @@ const addTileLocation = (
     };
   }
 
-  tileLocations.byId[tile.id][curOrPrevKey] = coords;
+  tileLocations.byId[tile.id][curOrPrevKey] = tile;
+
+  return tileLocations;
 };
