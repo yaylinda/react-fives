@@ -1,4 +1,4 @@
-import { TileData, MoveDirection, Coordinates } from "../types";
+import { TileData, MoveDirection } from "../types";
 import { NUM_ROWS, NUM_COLS } from "./constants";
 import { moveOnBoard } from "./mover";
 

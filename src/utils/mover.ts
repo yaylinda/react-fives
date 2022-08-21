@@ -1,12 +1,7 @@
 import { sum } from "lodash";
-import {
-  TileData,
-  MoveDirection,
-  IntermediateTileData,
-  TileLocations,
-} from "../types";
+import { TileData, MoveDirection, IntermediateTileData } from "../types";
 import { NUM_ROWS, NUM_COLS, START_NUM_2, START_NUM_3 } from "./constants";
-import { initBoard, resetBoard } from "./utils";
+import { initBoard } from "./utils";
 
 /**
  *
@@ -23,7 +18,6 @@ export const moveOnBoard = (
   score: number;
   moved: { rows: number[]; cols: number[] };
 } => {
-  console.log(`[moveOnBoard] board=${JSON.stringify(board)}`);
   const intermediateBoard: IntermediateTileData[][] = Array.from(
     Array(NUM_ROWS)
   ).map((_, r) => Array.from(Array(NUM_COLS)).map((_, c) => ({ tiles: [] })));
@@ -129,9 +123,6 @@ export const moveOnBoard = (
   let moveScore = 0;
   const merged: { [key in number]: number } = {};
   const newBoard = initBoard();
-  console.log(
-    `[moveOnBoard] intermediateBoard=${JSON.stringify(intermediateBoard)}`
-  );
   for (let row = 0; row < NUM_ROWS; row++) {
     for (let col = 0; col < NUM_COLS; col++) {
       const tiles = intermediateBoard[row][col].tiles.filter(
@@ -154,10 +145,6 @@ export const moveOnBoard = (
       }
     }
   }
-
-  console.log(
-    `[moveOnBoard] newBoard after merging=${JSON.stringify(newBoard)}`
-  );
 
   return {
     board: newBoard,

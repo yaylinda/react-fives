@@ -11,8 +11,6 @@ function Board() {
     (tileId) => tileLocations.byId[tileId].current != null
   );
 
-  console.log(`[Board] tileLocations=${JSON.stringify(tileLocations)}`);
-
   return (
     <Box sx={{ position: "relative" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
@@ -44,7 +42,7 @@ function Board() {
         if (!tileData) {
           return null;
         }
-        return <Tile {...tileData} />;
+        return <Tile key={JSON.stringify(tileData)} {...tileData} />;
       })}
     </Box>
   );
