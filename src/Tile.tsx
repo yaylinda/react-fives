@@ -122,9 +122,13 @@ const SMALL_TILE_WITH_BORDER = {
 };
 
 const getPixelsFromCoordinates = ({ row, col }: Coordinates) => {
+  const top = row * 50 + row * 5;
+  const left = col * 50 + col * 5;
   return {
-    top: row * 50 + row * 5,
-    left: col * 50 + col * 5,
+    top,
+    left,
+    bottom: top + 50,
+    right: left + 50,
   };
 };
 
@@ -158,18 +162,18 @@ function Tile({ tile, coordinates }: TileProps) {
         DEFAULT,
         STYLES[`tile_${value}`],
         {
+          zIndex: value,
           position: "absolute",
           top,
           left,
           transform: `scale(${scale})`,
-          transitionProperty: "left, top, transform",
-          transitionDuration: "250ms, 250ms, 100ms",
-          fontSize: 12,
+          transitionProperty:
+            "left, top, bottom, right, transform, borderColor",
+          transitionDuration: "250ms, 250ms, 250ms, 250ms, 100ms, 250ms",
         },
       ]}
     >
       {value}
-      {id}
     </Box>
   );
 }

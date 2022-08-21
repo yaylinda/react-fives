@@ -49,10 +49,9 @@ const useGameStore = create<GameState>()((set, get) => ({
         return state;
       }
 
-      // Move and merge the tiles. Update tile locations.
+      // Move and merge the tiles.
       const { intermediateBoard, moved } = moveTiles(state.board, dir);
       const { board, merged, score } = mergeTiles(intermediateBoard);
-      const tileLocations = convertBoardToLocations(board, intermediateBoard);
 
       // Update the count of the tiles that got merged.
       for (let key in merged) {
@@ -90,7 +89,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       return {
         ...state,
         board: [...board],
-        tileLocations,
+        tileLocations: convertBoardToLocations(board, intermediateBoard),
         isGameOver: gameOver,
         showGameOverDialog: gameOver,
         moves: moves,
