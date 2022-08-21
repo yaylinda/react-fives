@@ -2,9 +2,8 @@ import { CellData } from "./types";
 import { Box } from "@mui/material";
 import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
-import { START_NUM_2, START_NUM_3 } from "./utils";
 import { useEffect, useState } from "react";
-import useGameStore from "./gameStore";
+import { START_NUM_2, START_NUM_3 } from "./utils/constants";
 
 /**
  * Font sizes

@@ -1,14 +1,13 @@
 import create from "zustand";
-import { CellData, MoveDirection } from "./types";
+import { CellData, MoveDirection } from "../types";
+import { NUM_ROWS, NUM_COLS } from "../utils/constants";
+import { randomCellValue } from "../utils/generator";
+import { moveOnBoard } from "../utils/mover";
 import {
   getCoordinatesForNewCell,
   initBoard,
   isGameOver,
-  moveOnBoard,
-  NUM_COLS,
-  NUM_ROWS,
-  randomCellValue,
-} from "./utils";
+} from "../utils/utils";
 
 export interface GameState {
   hasStarted: boolean;

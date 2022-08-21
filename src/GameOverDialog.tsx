@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import DialogTransition from "./DialogTransition";
-import useGameStore from "./gameStore";
+import useGameStore from "./stores/gameStore";
 
 function GameOverDialog() {
   const {

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import useGameStore from "./gameStore";
+import useGameStore from "./stores/gameStore";
 import { colors } from "./theme";
 import Tile from "./Tile";
 

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import useGameStore from "./gameStore";
-import Tile, { PreviewTile } from "./Tile";
+import useGameStore from "./stores/gameStore";
+import { PreviewTile } from "./Tile";
 
 function StatsBar() {
   const { hasStarted, moves, score, nextValue } = useGameStore();

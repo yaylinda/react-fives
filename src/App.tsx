@@ -1,7 +1,7 @@
 import { useThrottledCallback } from "use-debounce";
 import { useEffect } from "react";
-import useGameStore from "./gameStore";
-import { convertKeyCodeToDirection } from "./utils";
+import useGameStore from "./stores/gameStore";
+import { convertKeyCodeToDirection } from "./utils/utils";
 import { AppBar, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import Game from "./Game";
 import GameOverDialog from "./GameOverDialog";
@@ -52,6 +52,10 @@ function App() {
   // TODO - implement personal achievements
 
   // TODO - implement online high score
+
+  // TODO - implement local high score
+
+  // TODO - fix weird vertical scrolling issue on mobile
 
   return (
     <ThemeProvider theme={theme}>

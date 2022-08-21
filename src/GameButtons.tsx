@@ -6,7 +6,7 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import useGameStore from "./gameStore";
+import useGameStore from "./stores/gameStore";
 import { colors } from "./theme";
 import { MoveDirection } from "./types";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
