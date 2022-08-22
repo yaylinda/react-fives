@@ -110,13 +110,13 @@ const STYLES: { [key in string]: SystemStyleObject<typeof theme> } = {
 };
 
 const SMALL_TILE_WITHOUT_BORDER = {
-  height: 24,
-  width: 24,
+  height: 20,
+  width: 20,
 };
 
 const SMALL_TILE_WITH_BORDER = {
-  height: 16,
-  width: 16,
+  height: 12,
+  width: 12,
   borderWidth: 4,
 };
 
@@ -149,11 +149,20 @@ function Tile({ tile, coordinates }: TileProps) {
   const [scale, setScale] = useState(isNew ? 0 : 1);
 
   useEffect(() => {
-    if (isMerge || isNew) {
+    if (isMerge) {
       setScale(1.1);
       setTimeout(() => setScale(1), 100);
     }
-  }, [isMerge, isNew]);
+  }, [isMerge]);
+
+  useEffect(() => {
+    if (isNew) {
+      setTimeout(() => {
+        setScale(1.1);
+        setTimeout(() => setScale(1), 100);
+      }, 100);
+    }
+  }, [isNew]);
 
   // TODO - fix animation when moving down or right
 

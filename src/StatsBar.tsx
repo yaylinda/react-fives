@@ -20,7 +20,7 @@ function StatsBar() {
     >
       <Box>
         <Typography>Score</Typography>
-        <Typography sx={{ textAlign: "center", fontSize: 24 }}>
+        <Typography sx={{ textAlign: "center", fontSize: 20 }}>
           {score}
         </Typography>
       </Box>
@@ -32,7 +32,7 @@ function StatsBar() {
       </Box>
       <Box>
         <Typography>Moves</Typography>
-        <Typography sx={{ textAlign: "center", fontSize: 24 }}>
+        <Typography sx={{ textAlign: "center", fontSize: 20 }}>
           {moves}
         </Typography>
       </Box>
