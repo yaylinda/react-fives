@@ -155,6 +155,8 @@ function Tile({ tile, coordinates }: TileProps) {
     }
   }, [isMerge, isNew]);
 
+  // TODO - fix animation when moving down or right
+
   return (
     <Box
       sx={[
@@ -166,7 +168,7 @@ function Tile({ tile, coordinates }: TileProps) {
           top,
           left,
           transform: `scale(${scale})`,
-          transitionProperty: "left, top, transform",
+          transitionProperty: "top, left, transform",
           transitionDuration: "250ms, 250ms, 100ms",
         },
       ]}

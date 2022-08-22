@@ -20,7 +20,7 @@ export type TileLocations = {
   [tileId in string]: {
     tile: TileData;
     coordinates: Coordinates;
-  } | null;
+  };
 };
 
 export interface Coordinates {

@@ -34,9 +34,6 @@ function Board() {
         ))}
       </Box>
       {Object.values(tileLocations).map((tile) => {
-        if (!tile) {
-          return null;
-        }
         return <Tile key={tile.tile.id} {...tile} />;
       })}
     </Box>

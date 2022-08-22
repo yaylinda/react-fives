@@ -10,7 +10,11 @@ import theme, { colors } from "./theme";
 const ANIMATION_DURATION = 100;
 
 function App() {
-  const { move } = useGameStore();
+  const { move, restoreStateFromLocalStorage } = useGameStore();
+
+  useEffect(() => {
+    restoreStateFromLocalStorage();
+  }, []);
 
   /**
    * When arrow keys are pressed, do the correct move on the board.
@@ -56,6 +60,8 @@ function App() {
   // TODO - implement local high score
 
   // TODO - fix weird vertical scrolling issue on mobile
+
+  // TODO - use variable mapping for colors/values of tiles
 
   return (
     <ThemeProvider theme={theme}>

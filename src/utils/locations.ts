@@ -53,10 +53,6 @@ const addTileLocation = (
     return tileLocations;
   }
 
-  if (!tileLocations[tile.id]) {
-    tileLocations[tile.id] = null;
-  }
-
   tileLocations[tile.id] = {
     tile,
     coordinates,

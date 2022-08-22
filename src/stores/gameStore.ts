@@ -1,6 +1,10 @@
 import create from "zustand";
 import { TileData, MoveDirection, TileLocations } from "../types";
-import { NUM_ROWS, NUM_COLS } from "../utils/constants";
+import {
+  NUM_ROWS,
+  NUM_COLS,
+  LOCAL_STORAGE_GAME_STATE,
+} from "../utils/constants";
 import { getCoordinatesForNewTile } from "../utils/coordinates";
 import { generateTileValue } from "../utils/generator";
 import { convertBoardToLocations } from "../utils/locations";
@@ -23,9 +27,8 @@ export interface GameState {
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
+  restoreStateFromLocalStorage: () => void;
 }
-
-// TODO - load game state storage and save to local storage
 
 const useGameStore = create<GameState>()((set, get) => ({
   hasStarted: false,
@@ -87,8 +90,8 @@ const useGameStore = create<GameState>()((set, get) => ({
       // Check if game is over.
       const gameOver = isGameOver(JSON.parse(JSON.stringify(board)));
 
-      // Return the updated state.
-      return {
+      // Persist the updated state in localStorage.
+      const updatedState = {
         ...state,
         board: [...board],
         tileLocations: convertBoardToLocations(board, intermediateBoard),
@@ -102,6 +105,11 @@ const useGameStore = create<GameState>()((set, get) => ({
           ? generateTileValue(state.merged, state.generated, moves)
           : state.nextValue,
       };
+      window.localStorage.setItem(
+        LOCAL_STORAGE_GAME_STATE,
+        JSON.stringify(updatedState)
+      );
+      return updatedState;
     }),
 
   /**
@@ -120,7 +128,7 @@ const useGameStore = create<GameState>()((set, get) => ({
         isMerge: false,
       };
 
-      return {
+      const updatedState = {
         ...state,
         board: board,
         tileLocations: convertBoardToLocations(board, initIntermediateBoard()),
@@ -133,6 +141,11 @@ const useGameStore = create<GameState>()((set, get) => ({
         generated: {},
         nextValue: generateTileValue({}, {}, 0),
       };
+      window.localStorage.setItem(
+        LOCAL_STORAGE_GAME_STATE,
+        JSON.stringify(updatedState)
+      );
+      return updatedState;
     }),
 
   /**
@@ -141,6 +154,25 @@ const useGameStore = create<GameState>()((set, get) => ({
    */
   closeGameOverDialog: () =>
     set((state) => ({ ...state, showGameOverDialog: false })),
+
+  /**
+   *
+   * @returns
+   */
+  restoreStateFromLocalStorage: () =>
+    set((state) => {
+      const restoredStateStr = window.localStorage.getItem(
+        LOCAL_STORAGE_GAME_STATE
+      );
+      if (restoredStateStr) {
+        return {
+          ...state,
+          ...JSON.parse(restoredStateStr),
+        };
+      } else {
+        return { ...state };
+      }
+    }),
 }));
 
 export default useGameStore;

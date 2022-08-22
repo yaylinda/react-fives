@@ -8,3 +8,5 @@ export const START_NUM_DIFF_THRESHOLD = 5;
 export const MERGABLES = [
   5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 20480, 40960,
 ];
+
+export const LOCAL_STORAGE_GAME_STATE = "gameState";
