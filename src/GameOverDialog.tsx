@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import DialogTransition from "./DialogTransition";
 import useGameStore from "./stores/gameStore";
+import useHighScoresStore from "./stores/highScoresStore";
+import { colors } from "./theme";
 
 function GameOverDialog() {
   const {
@@ -20,6 +22,8 @@ function GameOverDialog() {
     closeGameOverDialog,
   } = useGameStore();
 
+  const { loading, scores } = useHighScoresStore();
+
   // TODO - show bar chart or some cool visualization of merged/generated
   return (
     <Dialog
@@ -27,9 +31,8 @@ function GameOverDialog() {
       TransitionComponent={DialogTransition}
       keepMounted
       onClose={closeGameOverDialog}
-      aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle>Game Over</DialogTitle>
+      <DialogTitle color={{ sx: colors.LIGHT }}>Game Over</DialogTitle>
       <DialogContent>
         <DialogContentText>Score: {score}</DialogContentText>
         <DialogContentText>Moves: {moves}</DialogContentText>
@@ -38,7 +41,7 @@ function GameOverDialog() {
           Generated: {JSON.stringify(generated)}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ justifyContent: "space-between" }}>
         <Button onClick={closeGameOverDialog}>OK</Button>
         <Button onClick={newGame}>New Game</Button>
       </DialogActions>

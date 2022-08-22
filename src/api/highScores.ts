@@ -14,6 +14,6 @@ const db = getFirestore(app);
 
 export const highScoresCollection = collection(db, "fives_high_scores");
 
-export const addHighScore = (highScore: HighScore) => {};
+export const fetchHighScores = () => {};
 
-export const getHighScores = () => {};
+export const addHighScore = (highScore: HighScore) => {};

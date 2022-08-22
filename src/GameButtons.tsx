@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  IconButton,
   Typography,
 } from "@mui/material";
 import useGameStore from "./stores/gameStore";
@@ -15,6 +16,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useState } from "react";
 import DialogTransition from "./DialogTransition";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 /**
  *
@@ -132,12 +135,18 @@ function GameButtons() {
         TransitionComponent={DialogTransition}
         keepMounted
         onClose={() => setShowConfirmRestartDialog(false)}
-        aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Restart?</DialogTitle>
+        <DialogTitle sx={{ color: colors.LIGHT }}>Restart?</DialogTitle>
         <DialogActions sx={{ justifyContent: "space-between" }}>
-          <Button onClick={() => setShowConfirmRestartDialog(false)}>No</Button>
-          <Button onClick={restart}>Yes</Button>
+          <IconButton
+            sx={{ color: "red" }}
+            onClick={() => setShowConfirmRestartDialog(false)}
+          >
+            <CloseIcon fontSize="large" />
+          </IconButton>
+          <IconButton sx={{ color: "green" }} onClick={restart}>
+            <CheckIcon fontSize="large" />
+          </IconButton>
         </DialogActions>
       </Dialog>
     </Box>

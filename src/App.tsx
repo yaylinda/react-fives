@@ -2,11 +2,19 @@ import { useThrottledCallback } from "use-debounce";
 import { useEffect } from "react";
 import useGameStore from "./stores/gameStore";
 import { convertKeyCodeToDirection } from "./utils/utils";
-import { AppBar, ThemeProvider, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import Game from "./Game";
 import GameOverDialog from "./GameOverDialog";
 import theme, { colors } from "./theme";
 import useUserStore from "./stores/userStore";
+import moment from "moment";
 
 const ANIMATION_DURATION = 100;
 
@@ -76,7 +84,28 @@ function App() {
         </Toolbar>
       </AppBar>
       <Game />
+      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
+        <Button>
+          <Typography>Show high scores</Typography>
+        </Button>
+      </Box>
       <GameOverDialog />
+      <Box
+        sx={{
+          backgroundColor: colors.DARK,
+          position: "absolute",
+          textAlign: "center",
+          bottom: 0,
+          color: colors.LIGHT,
+          paddingTop: 1,
+          paddingBottom: 1,
+          width: "100%",
+        }}
+      >
+        <Typography
+          fontSize={10}
+        >{`© ${moment().year()} YayLinda Inc.`}</Typography>
+      </Box>
     </ThemeProvider>
   );
 }

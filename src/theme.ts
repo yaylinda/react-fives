@@ -21,6 +21,9 @@ const theme = createTheme({
     secondary: {
       main: colors.ACCENT,
     },
+    background: {
+      paper: colors.DARK,
+    },
     info: {
       main: colors.LIGHT,
     },
