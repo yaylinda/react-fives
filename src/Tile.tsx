@@ -147,14 +147,21 @@ function Tile({ tile, coordinates }: TileProps) {
   const { id, value, isNew, isMerge } = tile;
   const { top, left } = getPixelsFromCoordinates(coordinates);
 
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(isNew ? 0 : 1);
 
   useEffect(() => {
-    if (isNew || isMerge) {
+    if (isMerge) {
       setScale(1.1);
       setTimeout(() => setScale(1), 100);
     }
-  }, [isNew, isMerge]);
+  }, [isMerge]);
+
+  useEffect(() => {
+    if (isNew) {
+      setScale(1.1);
+      setTimeout(() => setScale(1), 100);
+    }
+  }, [isNew]);
 
   return (
     <Box
@@ -162,7 +169,7 @@ function Tile({ tile, coordinates }: TileProps) {
         DEFAULT,
         STYLES[`tile_${value}`],
         {
-          zIndex: value,
+          zIndex: isNew ? 0 : value,
           position: "absolute",
           top,
           left,

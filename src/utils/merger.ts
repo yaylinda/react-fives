@@ -5,8 +5,7 @@ import { initBoard } from "./utils";
 
 /**
  *
- * @param board
- * @param dir
+ * @param intermediateBoard
  * @returns
  */
 export const mergeTiles = (

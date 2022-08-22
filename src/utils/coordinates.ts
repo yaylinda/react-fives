@@ -14,6 +14,10 @@ export const getCoordinatesForNewTile = (
 ): Coordinates | null => {
   switch (dir) {
     case MoveDirection.LEFT: {
+      if (moved.rows.length === 0) {
+        return null;
+      }
+
       const values = [];
       for (let row = 0; row < NUM_ROWS; row++) {
         values.push(board[row][NUM_COLS - 1].value);
@@ -28,6 +32,10 @@ export const getCoordinatesForNewTile = (
       return { col: NUM_COLS - 1, row: index };
     }
     case MoveDirection.RIGHT: {
+      if (moved.rows.length === 0) {
+        return null;
+      }
+
       const values = [];
       for (let row = 0; row < NUM_ROWS; row++) {
         values.push(board[row][0].value);
@@ -42,6 +50,10 @@ export const getCoordinatesForNewTile = (
       return { col: 0, row: index };
     }
     case MoveDirection.UP: {
+      if (moved.cols.length === 0) {
+        return null;
+      }
+
       const values = [];
       for (let col = 0; col < NUM_COLS; col++) {
         values.push(board[NUM_ROWS - 1][col].value);
@@ -56,6 +68,10 @@ export const getCoordinatesForNewTile = (
       return { col: index, row: NUM_ROWS - 1 };
     }
     case MoveDirection.DOWN: {
+      if (moved.cols.length === 0) {
+        return null;
+      }
+
       const values = [];
       for (let col = 0; col < NUM_COLS; col++) {
         values.push(board[0][col].value);

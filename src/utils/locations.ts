@@ -42,7 +42,6 @@ export const convertBoardToLocations = (
  * @param coordinates
  * @param tile
  * @param tileLocations
- * @param curOrPrevKey
  * @returns
  */
 const addTileLocation = (
@@ -50,7 +49,7 @@ const addTileLocation = (
   tile: TileData,
   tileLocations: TileLocations
 ): TileLocations => {
-  if (!tile.id) {
+  if (!tile.id || !tile.value) {
     return tileLocations;
   }
 

@@ -1,7 +1,6 @@
-import { sum } from "lodash";
 import { TileData, MoveDirection, IntermediateTileData } from "../types";
 import { NUM_ROWS, NUM_COLS, START_NUM_2, START_NUM_3 } from "./constants";
-import { initBoard, initIntermediateBoard } from "./utils";
+import { initIntermediateBoard } from "./utils";
 
 /**
  *

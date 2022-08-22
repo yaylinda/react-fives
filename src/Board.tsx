@@ -7,12 +7,6 @@ import { NUM_COLS, NUM_ROWS } from "./utils/constants";
 function Board() {
   const { tileLocations } = useGameStore();
 
-  // const tileIds = Object.keys(tileLocations.byId).filter(
-  //   (tileId) => tileLocations.byId[tileId] != null
-  // );
-
-  console.log(`[Board] tileLocations=${JSON.stringify(tileLocations)}`);
-
   return (
     <Box sx={{ position: "relative" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
