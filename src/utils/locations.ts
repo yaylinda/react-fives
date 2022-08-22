@@ -22,9 +22,9 @@ export const convertBoardToLocations = (
     for (let col = 0; col < NUM_COLS; col++) {
       const coords: Coordinates = { row, col };
 
-      intermediateBoard[row][col].tiles.forEach((tile) => {
+      for (let tile of intermediateBoard[row][col].tiles) {
         tileLocations = addTileLocation(coords, tile, tileLocations);
-      });
+      }
 
       tileLocations = addTileLocation(
         coords,

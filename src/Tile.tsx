@@ -4,7 +4,6 @@ import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
 import { useEffect, useState } from "react";
 import { START_NUM_2, START_NUM_3 } from "./utils/constants";
-import { TimesOneMobiledata } from "@mui/icons-material";
 
 /**
  * Font sizes
@@ -127,8 +126,8 @@ const getPixelsFromCoordinates = ({ row, col }: Coordinates) => {
   return {
     top,
     left,
-    bottom: top + 50,
-    right: left + 50,
+    bottom: top - 50,
+    right: left - 50,
   };
 };
 
@@ -145,23 +144,16 @@ interface TileProps {
  */
 function Tile({ tile, coordinates }: TileProps) {
   const { id, value, isNew, isMerge } = tile;
-  const { top, left } = getPixelsFromCoordinates(coordinates);
+  const { top, left, bottom, right } = getPixelsFromCoordinates(coordinates);
 
   const [scale, setScale] = useState(isNew ? 0 : 1);
 
   useEffect(() => {
-    if (isMerge) {
+    if (isMerge || isNew) {
       setScale(1.1);
       setTimeout(() => setScale(1), 100);
     }
-  }, [isMerge]);
-
-  useEffect(() => {
-    if (isNew) {
-      setScale(1.1);
-      setTimeout(() => setScale(1), 100);
-    }
-  }, [isNew]);
+  }, [isMerge, isNew]);
 
   return (
     <Box
@@ -174,9 +166,8 @@ function Tile({ tile, coordinates }: TileProps) {
           top,
           left,
           transform: `scale(${scale})`,
-          transitionProperty:
-            "left, top, bottom, right, transform, borderColor",
-          transitionDuration: "250ms, 250ms, 250ms, 250ms, 100ms, 250ms",
+          transitionProperty: "left, top, transform",
+          transitionDuration: "250ms, 250ms, 100ms",
         },
       ]}
     >

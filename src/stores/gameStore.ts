@@ -1,5 +1,5 @@
 import create from "zustand";
-import { TileData, MoveDirection, TileLocations, Coordinates } from "../types";
+import { TileData, MoveDirection, TileLocations } from "../types";
 import { NUM_ROWS, NUM_COLS } from "../utils/constants";
 import { getCoordinatesForNewTile } from "../utils/coordinates";
 import { generateTileValue } from "../utils/generator";
@@ -19,6 +19,7 @@ export interface GameState {
   merged: { [key in number]: number };
   generated: { [key in number]: number };
   nextValue: number;
+  lastMoveDirection: MoveDirection | null;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
@@ -37,6 +38,7 @@ const useGameStore = create<GameState>()((set, get) => ({
   merged: {},
   generated: {},
   nextValue: 0,
+  lastMoveDirection: null,
 
   /**
    *
@@ -83,7 +85,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       }
 
       // Check if game is over.
-      const gameOver = isGameOver(board);
+      const gameOver = isGameOver(JSON.parse(JSON.stringify(board)));
 
       // Return the updated state.
       return {
