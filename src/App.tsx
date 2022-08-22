@@ -15,12 +15,15 @@ import GameOverDialog from "./GameOverDialog";
 import theme, { colors } from "./theme";
 import useUserStore from "./stores/userStore";
 import moment from "moment";
+import useHighScoresStore from "./stores/highScoresStore";
+import HighScoresDialog from "./HighScoresDialog";
 
 const ANIMATION_DURATION = 100;
 
 function App() {
   const { move, restoreState } = useGameStore();
   const { init } = useUserStore();
+  const { openDialog } = useHighScoresStore();
 
   useEffect(() => {
     restoreState();
@@ -85,11 +88,10 @@ function App() {
       </AppBar>
       <Game />
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
-        <Button>
+        <Button onClick={openDialog}>
           <Typography>Show high scores</Typography>
         </Button>
       </Box>
-      <GameOverDialog />
       <Box
         sx={{
           backgroundColor: colors.DARK,
@@ -106,6 +108,8 @@ function App() {
           fontSize={10}
         >{`© ${moment().year()} YayLinda Inc.`}</Typography>
       </Box>
+      <GameOverDialog />
+      <HighScoresDialog />
     </ThemeProvider>
   );
 }
