@@ -27,3 +27,19 @@ export interface Coordinates {
   row: number;
   col: number;
 }
+
+export interface User {
+  userId: string;
+  username: string;
+}
+
+export interface HighScore {
+  timestamp: string;
+  username: string;
+  clientId: string;
+  score: number;
+  moves: number;
+  highestMerged: number;
+  merged: { [key in number]: number };
+  generated: { [key in number]: number };
+}

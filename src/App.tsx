@@ -6,14 +6,17 @@ import { AppBar, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import Game from "./Game";
 import GameOverDialog from "./GameOverDialog";
 import theme, { colors } from "./theme";
+import useUserStore from "./stores/userStore";
 
 const ANIMATION_DURATION = 100;
 
 function App() {
-  const { move, restoreStateFromLocalStorage } = useGameStore();
+  const { move, restoreState } = useGameStore();
+  const { init } = useUserStore();
 
   useEffect(() => {
-    restoreStateFromLocalStorage();
+    restoreState();
+    init();
   }, []);
 
   /**

@@ -27,7 +27,7 @@ export interface GameState {
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
-  restoreStateFromLocalStorage: () => void;
+  restoreState: () => void;
 }
 
 const useGameStore = create<GameState>()((set, get) => ({
@@ -50,7 +50,7 @@ const useGameStore = create<GameState>()((set, get) => ({
    */
   move: (dir: MoveDirection) =>
     set((state) => {
-      if (!state.hasStarted) {
+      if (!state.hasStarted || state.isGameOver) {
         return state;
       }
 
@@ -159,7 +159,7 @@ const useGameStore = create<GameState>()((set, get) => ({
    *
    * @returns
    */
-  restoreStateFromLocalStorage: () =>
+  restoreState: () =>
     set((state) => {
       const restoredStateStr = window.localStorage.getItem(
         LOCAL_STORAGE_GAME_STATE
