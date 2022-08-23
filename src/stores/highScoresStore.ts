@@ -13,6 +13,8 @@ interface HighScoresState {
   closeDialog: () => void;
   openPostScoreDialog: () => void;
   closePostScoreDialog: () => void;
+  setPosting: (posting: boolean) => void;
+  setSuccessfullyPosted: (success: boolean) => void;
   fetchHighScores: () => void;
 }
 
@@ -30,6 +32,9 @@ const useHighScoresStore = create<HighScoresState>()((set, get) => ({
     set((state) => ({ ...state, showPostScoreDialog: true })),
   closePostScoreDialog: () =>
     set((state) => ({ ...state, showPostScoreDialog: false })),
+  setPosting: (posting: boolean) => set((state) => ({ ...state, posting })),
+  setSuccessfullyPosted: (success: boolean) =>
+    set((state) => ({ ...state, successfullyPosted: success })),
   fetchHighScores: () => set((state) => state),
 }));
 

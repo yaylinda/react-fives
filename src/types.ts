@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore/lite";
+
 export enum MoveDirection {
   UP = "UP",
   DOWN = "DOWN",
@@ -34,14 +36,16 @@ export interface User {
 }
 
 export interface HighScore {
-  timestamp: string;
   username: string;
   clientId: string;
   gameId: string;
-  gameSeed: string;
+  gameSeed: string | null;
   score: number;
   moves: number;
-  highestMerged: number;
   merged: { [key in number]: number };
   generated: { [key in number]: number };
+}
+
+export interface HighScoreDoc extends HighScore {
+  timestamp: Timestamp;
 }

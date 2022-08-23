@@ -9,6 +9,7 @@ interface UserState {
   username: string | null;
   clientId: string;
   init: () => void;
+  setUsername: (username: string) => void;
 }
 
 const useUserStore = create<UserState>()((set, get) => ({
@@ -28,6 +29,17 @@ const useUserStore = create<UserState>()((set, get) => ({
       }
       const username = window.localStorage.getItem(LOCAL_STORAGE_USERNAME);
       return { clientId, username };
+    }),
+
+  /**
+   *
+   * @param username
+   * @returns
+   */
+  setUsername: (username: string) =>
+    set((state) => {
+      window.localStorage.setItem(LOCAL_STORAGE_USERNAME, username);
+      return { ...state, username };
     }),
 }));
 

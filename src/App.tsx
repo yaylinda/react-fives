@@ -35,10 +35,11 @@ function App() {
    * When arrow keys are pressed, do the correct move on the board.
    */
   const handleKeyDown = (e: KeyboardEvent) => {
-    e.preventDefault(); // disables page scrolling with keyboard arrows
     const dir = convertKeyCodeToDirection(e.code);
+
     if (dir) {
       move(dir);
+      e.preventDefault(); // disables page scrolling with keyboard arrows
     }
   };
 
@@ -55,12 +56,12 @@ function App() {
    * Setup listener for keyboard events.
    */
   useEffect(() => {
-    window.addEventListener("keydown", throttledHandleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", throttledHandleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [throttledHandleKeyDown]);
+  }, []);
 
   // TODO - if on mobile, implement swipe
 

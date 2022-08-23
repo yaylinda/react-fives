@@ -27,6 +27,9 @@ const theme = createTheme({
     info: {
       main: colors.LIGHT,
     },
+    text: {
+      primary: colors.LIGHT,
+    },
   },
 });
 
