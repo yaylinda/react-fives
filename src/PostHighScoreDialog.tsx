@@ -1,7 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -9,7 +8,6 @@ import {
   DialogTitle,
   IconButton,
   TextField,
-  Typography,
 } from "@mui/material";
 import DialogTransition from "./DialogTransition";
 import useHighScoresStore from "./stores/highScoresStore";
@@ -27,8 +25,9 @@ function PostHighScoreDialog() {
     showPostScoreDialog,
     posting,
     closePostScoreDialog,
-    setPosting,
-    setSuccessfullyPosted,
+    startPosting,
+    setPostedSuccess,
+    setPostedFailed,
   } = useHighScoresStore();
   const { clientId, username, setUsername } = useUserStore();
 
@@ -45,14 +44,11 @@ function PostHighScoreDialog() {
     };
 
     try {
-      setPosting(true);
+      startPosting();
       await postHighScore(highScore);
-      setSuccessfullyPosted(true);
-      setPosting(false);
-      closePostScoreDialog();
+      setPostedSuccess(currentGameId);
     } catch (e) {
-      setSuccessfullyPosted(false);
-      setPosting(false);
+      setPostedFailed();
     }
   };
 

@@ -24,7 +24,7 @@ const ANIMATION_DURATION = 100;
 function App() {
   const { move, restoreState } = useGameStore();
   const { init } = useUserStore();
-  const { openDialog } = useHighScoresStore();
+  const { openHighScoresDialog: openDialog } = useHighScoresStore();
 
   useEffect(() => {
     restoreState();

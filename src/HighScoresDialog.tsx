@@ -11,7 +11,10 @@ import useHighScoresStore from "./stores/highScoresStore";
 import { colors } from "./theme";
 
 function HighScoresDialog() {
-  const { showDialog, closeDialog } = useHighScoresStore();
+  const {
+    showHighScoresDialog: showDialog,
+    closeHighScoresDialog: closeDialog,
+  } = useHighScoresStore();
 
   return (
     <Dialog

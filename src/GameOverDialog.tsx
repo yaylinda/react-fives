@@ -18,15 +18,15 @@ function GameOverDialog() {
   const { moves, score, currentGameId, newGame, closeGameOverDialog } =
     useGameStore();
 
-  const { posting, lastUploadedGameId, openPostScoreDialog, openDialog } =
-    useHighScoresStore();
+  const {
+    posting,
+    lastPostedGameId,
+    successfullyPosted,
+    openPostScoreDialog,
+    openHighScoresDialog,
+  } = useHighScoresStore();
 
-  const canPostHighScore = lastUploadedGameId !== currentGameId;
-
-  /**
-   *
-   */
-  const openHighScoreDialog = () => {};
+  const canPostHighScore = lastPostedGameId !== currentGameId;
 
   // TODO - show bar chart or some cool visualization of merged/generated
   return (
@@ -68,10 +68,10 @@ function GameOverDialog() {
         <LoadingButton
           loading={posting}
           onClick={() => {
-            canPostHighScore ? openPostScoreDialog() : openDialog();
+            canPostHighScore ? openPostScoreDialog() : closeGameOverDialog();
           }}
         >
-          {canPostHighScore ? "Post" : "Scores"}
+          {canPostHighScore ? "Post" : "Close"}
         </LoadingButton>
         <Button onClick={newGame}>New Game</Button>
         <Button
