@@ -17,6 +17,7 @@ import useUserStore from "./stores/userStore";
 import moment from "moment";
 import useHighScoresStore from "./stores/highScoresStore";
 import HighScoresDialog from "./HighScoresDialog";
+import PostHighScoreDialog from "./PostHighScoreDialog";
 
 const ANIMATION_DURATION = 100;
 
@@ -110,6 +111,7 @@ function App() {
       </Box>
       <GameOverDialog />
       <HighScoresDialog />
+      <PostHighScoreDialog />
     </ThemeProvider>
   );
 }

@@ -37,6 +37,8 @@ export interface HighScore {
   timestamp: string;
   username: string;
   clientId: string;
+  gameId: string;
+  gameSeed: string;
   score: number;
   moves: number;
   highestMerged: number;

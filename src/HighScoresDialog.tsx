@@ -11,17 +11,19 @@ import useHighScoresStore from "./stores/highScoresStore";
 import { colors } from "./theme";
 
 function HighScoresDialog() {
-  const { showDialog, openDialog, closeDialog } = useHighScoresStore();
+  const { showDialog, closeDialog } = useHighScoresStore();
 
   return (
     <Dialog
       open={showDialog}
       TransitionComponent={DialogTransition}
       keepMounted
-      onClose={openDialog}
+      onClose={closeDialog}
     >
       <DialogTitle sx={{ color: colors.LIGHT }}>High Scores</DialogTitle>
-      <DialogContent></DialogContent>
+      <DialogContent>
+        <DialogContentText>Coming soon... :)</DialogContentText>
+      </DialogContent>
       <DialogActions sx={{ justifyContent: "flex-end" }}>
         <Button onClick={closeDialog}>OK</Button>
       </DialogActions>

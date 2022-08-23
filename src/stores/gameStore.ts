@@ -11,6 +11,7 @@ import { convertBoardToLocations } from "../utils/locations";
 import { mergeTiles } from "../utils/merger";
 import { moveTiles } from "../utils/mover";
 import { initBoard, initIntermediateBoard, isGameOver } from "../utils/utils";
+import { v4 as uuidv4 } from "uuid";
 
 export interface GameState {
   hasStarted: boolean;
@@ -24,6 +25,7 @@ export interface GameState {
   generated: { [key in number]: number };
   nextValue: number;
   lastMoveDirection: MoveDirection | null;
+  currentGameId: string;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
   closeGameOverDialog: () => void;
@@ -42,6 +44,7 @@ const useGameStore = create<GameState>()((set, get) => ({
   generated: {},
   nextValue: 0,
   lastMoveDirection: null,
+  currentGameId: uuidv4(),
 
   /**
    *
@@ -140,6 +143,7 @@ const useGameStore = create<GameState>()((set, get) => ({
         merged: {},
         generated: {},
         nextValue: generateTileValue({}, {}, 0),
+        currentGameId: uuidv4(),
       };
       window.localStorage.setItem(
         LOCAL_STORAGE_GAME_STATE,

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -6,44 +7,80 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { useState } from "react";
 import DialogTransition from "./DialogTransition";
 import useGameStore from "./stores/gameStore";
 import useHighScoresStore from "./stores/highScoresStore";
 import { colors } from "./theme";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 function GameOverDialog() {
-  const {
-    showGameOverDialog,
-    moves,
-    score,
-    merged,
-    generated,
-    newGame,
-    closeGameOverDialog,
-  } = useGameStore();
+  const { moves, score, currentGameId, newGame, closeGameOverDialog } =
+    useGameStore();
 
-  const { loading, scores } = useHighScoresStore();
+  const { posting, lastUploadedGameId, openPostScoreDialog, openDialog } =
+    useHighScoresStore();
+
+  const canPostHighScore = lastUploadedGameId !== currentGameId;
+
+  /**
+   *
+   */
+  const openHighScoreDialog = () => {};
 
   // TODO - show bar chart or some cool visualization of merged/generated
   return (
     <Dialog
-      open={showGameOverDialog}
+      open={true}
       TransitionComponent={DialogTransition}
       keepMounted
       onClose={closeGameOverDialog}
     >
-      <DialogTitle color={{ sx: colors.LIGHT }}>Game Over</DialogTitle>
+      <DialogTitle sx={{ color: colors.LIGHT }}>Game Over</DialogTitle>
       <DialogContent>
-        <DialogContentText>Score: {score}</DialogContentText>
-        <DialogContentText>Moves: {moves}</DialogContentText>
-        <DialogContentText>Merged: {JSON.stringify(merged)}</DialogContentText>
-        <DialogContentText>
-          Generated: {JSON.stringify(generated)}
-        </DialogContentText>
+        <Box
+          sx={{
+            color: colors.LIGHT,
+            display: "flex",
+            flexDirection: "row",
+            gap: 1,
+          }}
+        >
+          <DialogContentText sx={{ color: colors.LIGHT }}>
+            You scored
+          </DialogContentText>
+          <DialogContentText sx={{ color: colors.ACCENT }}>
+            {score}
+          </DialogContentText>
+          <DialogContentText sx={{ color: colors.LIGHT }}>
+            points
+          </DialogContentText>
+          <DialogContentText sx={{ color: colors.LIGHT }}>in</DialogContentText>
+          <DialogContentText sx={{ color: colors.ACCENT }}>
+            {moves}
+          </DialogContentText>
+          <DialogContentText sx={{ color: colors.LIGHT }}>
+            moves
+          </DialogContentText>
+        </Box>
       </DialogContent>
       <DialogActions sx={{ justifyContent: "space-between" }}>
-        <Button onClick={closeGameOverDialog}>OK</Button>
+        <LoadingButton
+          loading={posting}
+          onClick={() => {
+            canPostHighScore ? openPostScoreDialog() : openDialog();
+          }}
+        >
+          {canPostHighScore ? "Post" : "Scores"}
+        </LoadingButton>
         <Button onClick={newGame}>New Game</Button>
+        <Button
+          onClick={() => {
+            /* TODO - implement */
+          }}
+        >
+          Share
+        </Button>
       </DialogActions>
     </Dialog>
   );
