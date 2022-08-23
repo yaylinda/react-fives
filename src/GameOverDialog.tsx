@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -15,8 +16,14 @@ import { colors } from "./theme";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 function GameOverDialog() {
-  const { moves, score, currentGameId, newGame, closeGameOverDialog } =
-    useGameStore();
+  const {
+    moves,
+    score,
+    currentGameId,
+    showGameOverDialog,
+    newGame,
+    closeGameOverDialog,
+  } = useGameStore();
 
   const {
     posting,
@@ -24,6 +31,7 @@ function GameOverDialog() {
     successfullyPosted,
     openPostScoreDialog,
     openHighScoresDialog,
+    resetPosting,
   } = useHighScoresStore();
 
   const canPostHighScore = lastPostedGameId !== currentGameId;
@@ -31,7 +39,7 @@ function GameOverDialog() {
   // TODO - show bar chart or some cool visualization of merged/generated
   return (
     <Dialog
-      open={true}
+      open={showGameOverDialog}
       TransitionComponent={DialogTransition}
       keepMounted
       onClose={closeGameOverDialog}
@@ -63,6 +71,22 @@ function GameOverDialog() {
             moves
           </DialogContentText>
         </Box>
+        {successfullyPosted && (
+          <Alert
+            sx={{ marginTop: 3 }}
+            action={
+              <Button
+                onClick={openHighScoresDialog}
+                color="inherit"
+                size="small"
+              >
+                Scores
+              </Button>
+            }
+          >
+            Success!
+          </Alert>
+        )}
       </DialogContent>
       <DialogActions sx={{ justifyContent: "space-between" }}>
         <LoadingButton
@@ -73,7 +97,14 @@ function GameOverDialog() {
         >
           {canPostHighScore ? "Post" : "Close"}
         </LoadingButton>
-        <Button onClick={newGame}>New Game</Button>
+        <Button
+          onClick={() => {
+            resetPosting();
+            newGame();
+          }}
+        >
+          New Game
+        </Button>
         <Button
           onClick={() => {
             /* TODO - implement */

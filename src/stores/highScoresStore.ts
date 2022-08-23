@@ -1,3 +1,4 @@
+import { FlashOnOutlined } from "@mui/icons-material";
 import create from "zustand";
 import { HighScore } from "../types";
 
@@ -14,6 +15,7 @@ interface HighScoresState {
   openPostScoreDialog: () => void;
   closePostScoreDialog: () => void;
   startPosting: () => void;
+  resetPosting: () => void;
   setPostedSuccess: (gameId: string) => void;
   setPostedFailed: () => void;
   fetchHighScores: () => void;
@@ -35,6 +37,8 @@ const useHighScoresStore = create<HighScoresState>()((set, get) => ({
     set((state) => ({ ...state, showPostScoreDialog: true })),
   closePostScoreDialog: () =>
     set((state) => ({ ...state, showPostScoreDialog: false })),
+  resetPosting: () =>
+    set((state) => ({ ...state, posting: false, successfullyPosted: false })),
   startPosting: () =>
     set((state) => ({ ...state, posting: true, successfullyPosted: false })),
   setPostedSuccess: (gameId: string) =>

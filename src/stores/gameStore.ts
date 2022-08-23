@@ -30,6 +30,7 @@ export interface GameState {
   newGame: () => void;
   closeGameOverDialog: () => void;
   restoreState: () => void;
+  openGameOverDialog: () => void;
 }
 
 const useGameStore = create<GameState>()((set, get) => ({
@@ -177,6 +178,13 @@ const useGameStore = create<GameState>()((set, get) => ({
         return { ...state };
       }
     }),
+
+  /**
+   *
+   * @returns
+   */
+  openGameOverDialog: () =>
+    set((state) => ({ ...state, showGameOverDialog: true })),
 }));
 
 export default useGameStore;

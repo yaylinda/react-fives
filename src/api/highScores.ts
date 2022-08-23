@@ -3,6 +3,7 @@ import {
   doc,
   getFirestore,
   setDoc,
+  getDocs,
   Timestamp,
   updateDoc,
 } from "firebase/firestore/lite";
@@ -14,7 +15,18 @@ const db = getFirestore(app);
 
 export const highScoresCollection = collection(db, "fives_high_scores");
 
-export const fetchHighScores = () => {};
+/**
+ *
+ * @returns
+ */
+export const fetchHighScores = async (): Promise<HighScoreDoc[]> => {
+  const highScores: HighScoreDoc[] = [];
+  const querySnapshot = await getDocs(highScoresCollection);
+  querySnapshot.forEach((doc) => {
+    highScores.push({ ...doc.data() } as HighScoreDoc);
+  });
+  return highScores;
+};
 
 /**
  *
