@@ -18,6 +18,7 @@ import { useState } from "react";
 import DialogTransition from "./DialogTransition";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import useHighScoresStore from "./stores/highScoresStore";
 
 /**
  *
@@ -60,6 +61,7 @@ function GameButtons() {
   const [showConfirmRestartDialog, setShowConfirmRestartDialog] =
     useState<boolean>(false);
   const { hasStarted, isGameOver, newGame } = useGameStore();
+  const {resetPosting} = useHighScoresStore();
 
   /**
    *
@@ -69,7 +71,10 @@ function GameButtons() {
     return (
       <Button
         variant="contained"
-        onClick={newGame}
+        onClick={() => {
+            resetPosting();
+            newGame();
+        }}
         sx={{ color: colors.LIGHT }}
       >
         <Typography>New Game</Typography>
