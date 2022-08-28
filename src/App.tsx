@@ -4,8 +4,6 @@ import useGameStore from "./stores/gameStore";
 import { convertKeyCodeToDirection } from "./utils/utils";
 import {
   AppBar,
-  BottomNavigation,
-  BottomNavigationAction,
   Box,
   Button,
   ThemeProvider,
@@ -20,11 +18,10 @@ import moment from "moment";
 import useHighScoresStore from "./stores/highScoresStore";
 import HighScoresDialog from "./HighScoresDialog";
 import PostHighScoreDialog from "./PostHighScoreDialog";
-import useModeStore from "./stores/modeStore";
+import useGameModeStore from "./stores/gameModeStore";
 import { GameMode } from "./types";
-import Filter4Icon from '@mui/icons-material/Filter4';
-import Filter5Icon from '@mui/icons-material/Filter5';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import NewGameModeSelectionDialog from "./NewGameModeSelectionDialog";
+import { BOARD_WIDTH } from "./styles";
 
 const ANIMATION_DURATION = 100;
 
@@ -32,7 +29,7 @@ function App() {
   const { move, restoreState } = useGameStore();
   const { init: initUserStore } = useUserStore();
   const { init: initHighScoresStore, openHighScoresDialog } = useHighScoresStore();
-  const { mode, init: initModeStore, updateMode } = useModeStore();
+  const { mode, init: initModeStore, openNewGameModeSelectionDialog } = useGameModeStore();
 
   useEffect(() => {
     restoreState();
@@ -108,22 +105,14 @@ function App() {
           marginTop: 5,
         }}
       >
-        <Button sx={{ width: 270 }} onClick={openHighScoresDialog}>
+        <Button variant="contained" sx={{ color: colors.LIGHT, width: BOARD_WIDTH }} onClick={openNewGameModeSelectionDialog}>
+          <Typography>New Game</Typography>
+        </Button>
+        <Button sx={{ width: BOARD_WIDTH }} onClick={openHighScoresDialog}>
           <Typography>Show high scores</Typography>
         </Button>
       </Box>
-      <BottomNavigation
-        showLabels
-        value={mode}
-        onChange={(event, newMode) => {
-          updateMode(newMode);
-        }}
-      >
-        <BottomNavigationAction value={GameMode.FOUR_BY_FOUR} label="4x4" icon={<Filter4Icon />} />
-        <BottomNavigationAction value={GameMode.DAILY_CHALLENGE} label="Daily Challenge" icon={<AccessTimeIcon />} />
-        <BottomNavigationAction value={GameMode.FIVE_BY_FIVE} label="5x5" icon={<Filter5Icon />} />
-      </BottomNavigation>
-      {/* <Box
+      <Box
         sx={{
           backgroundColor: colors.DARK,
           position: "absolute",
@@ -138,10 +127,11 @@ function App() {
         <Typography
           fontSize={10}
         >{`© ${moment().year()} YayLinda Inc.`}</Typography>
-      </Box> */}
+      </Box>
       <GameOverDialog />
       <HighScoresDialog />
       <PostHighScoreDialog />
+      <NewGameModeSelectionDialog />
     </ThemeProvider>
   );
 }

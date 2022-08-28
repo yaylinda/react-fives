@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import useGameStore from "./stores/gameStore";
 import { colors } from "./theme";
 import { MoveDirection } from "./types";
@@ -14,11 +6,6 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useState } from "react";
-import DialogTransition from "./DialogTransition";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import useHighScoresStore from "./stores/highScoresStore";
 
 /**
  *
@@ -58,31 +45,7 @@ const OnScreenKey = ({ dir }: { dir: MoveDirection }) => {
  * @returns
  */
 function GameButtons() {
-  const [showConfirmRestartDialog, setShowConfirmRestartDialog] =
-    useState<boolean>(false);
-  const { hasStarted, isGameOver, newGame } = useGameStore();
-  const { resetPosting } = useHighScoresStore();
-
-  /**
-   *
-   * @returns
-   */
-  const renderPrePostGameButtons = () => {
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", width: 270 }}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            resetPosting();
-            newGame();
-          }}
-          sx={{ color: colors.LIGHT }}
-        >
-          <Typography>New Game</Typography>
-        </Button>
-      </Box>
-    );
-  };
+  const { hasStarted, isGameOver } = useGameStore();
 
   /**
    *
@@ -106,19 +69,8 @@ function GameButtons() {
           </Box>
           <OnScreenKey dir={MoveDirection.RIGHT} />
         </Box>
-        <Button onClick={() => setShowConfirmRestartDialog(true)}>
-          <Typography>Restart</Typography>
-        </Button>
       </Box>
     );
-  };
-
-  /**
-   *
-   */
-  const restart = () => {
-    setShowConfirmRestartDialog(false);
-    newGame();
   };
 
   return (
@@ -130,28 +82,7 @@ function GameButtons() {
         width: 270
       }}
     >
-      {!hasStarted || isGameOver
-        ? renderPrePostGameButtons()
-        : renderInGameButtons()}
-      <Dialog
-        open={showConfirmRestartDialog}
-        TransitionComponent={DialogTransition}
-        keepMounted
-        onClose={() => setShowConfirmRestartDialog(false)}
-      >
-        <DialogTitle sx={{ color: colors.LIGHT }}>Restart?</DialogTitle>
-        <DialogActions sx={{ justifyContent: "space-between" }}>
-          <IconButton
-            sx={{ color: "red" }}
-            onClick={() => setShowConfirmRestartDialog(false)}
-          >
-            <CloseIcon fontSize="large" />
-          </IconButton>
-          <IconButton sx={{ color: "green" }} onClick={restart}>
-            <CheckIcon fontSize="large" />
-          </IconButton>
-        </DialogActions>
-      </Dialog>
+      {hasStarted && !isGameOver && renderInGameButtons()}
     </Box>
   );
 }

@@ -5,14 +5,19 @@ import { GAME_MODE } from "../utils/constants";
 
 export const DEFAULT_MODE = GameMode.FIVE_BY_FIVE;
 
-interface ModeState {
+interface GameModeState {
+  mode: GameMode,
+  showNewGameModeSelectionDialog: boolean;
   init: () => void,
   updateMode: (mode: GameMode) => void,
-  mode: GameMode,
+  openNewGameModeSelectionDialog: () => void;
+  closeNewGameModeSelectionDialog: () => void;
 }
 
-const useModeStore = create<ModeState>()((set, get) => ({
+const useGameModeStore = create<GameModeState>()((set, get) => ({
   mode: GameMode.FIVE_BY_FIVE,
+  showNewGameModeSelectionDialog: false,
+
   updateMode: (mode: GameMode) => set((state) => {
     window.localStorage.setItem(GAME_MODE, mode);
     return { ...state, mode }
@@ -33,6 +38,20 @@ const useModeStore = create<ModeState>()((set, get) => ({
       mode: DEFAULT_MODE,
     };
   }),
+
+  /**
+  *
+  * @returns
+  */
+  openNewGameModeSelectionDialog: () =>
+    set((state) => ({ ...state, showNewGameModeSelectionDialog: true })),
+
+  /**
+   *
+   * @returns
+   */
+  closeNewGameModeSelectionDialog: () =>
+    set((state) => ({ ...state, showNewGameModeSelectionDialog: false })),
 }));
 
-export default useModeStore;
+export default useGameModeStore;

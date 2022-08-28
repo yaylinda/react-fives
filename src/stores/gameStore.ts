@@ -28,9 +28,9 @@ export interface GameState {
   currentGameId: string;
   move: (dir: MoveDirection) => void;
   newGame: () => void;
-  closeGameOverDialog: () => void;
   restoreState: () => void;
   openGameOverDialog: () => void;
+  closeGameOverDialog: () => void;
 }
 
 const useGameStore = create<GameState>()((set, get) => ({
@@ -157,13 +157,6 @@ const useGameStore = create<GameState>()((set, get) => ({
    *
    * @returns
    */
-  closeGameOverDialog: () =>
-    set((state) => ({ ...state, showGameOverDialog: false })),
-
-  /**
-   *
-   * @returns
-   */
   restoreState: () =>
     set((state) => {
       const restoredStateStr = window.localStorage.getItem(
@@ -185,6 +178,13 @@ const useGameStore = create<GameState>()((set, get) => ({
    */
   openGameOverDialog: () =>
     set((state) => ({ ...state, showGameOverDialog: true })),
+
+  /**
+   *
+   * @returns
+   */
+  closeGameOverDialog: () =>
+    set((state) => ({ ...state, showGameOverDialog: false })),
 }));
 
 export default useGameStore;
