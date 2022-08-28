@@ -1,5 +1,11 @@
 import { Timestamp } from "firebase/firestore/lite";
 
+export enum GameMode {
+  FOUR_BY_FOUR = "FOUR_BY_FOUR",
+  FIVE_BY_FIVE = "FIVE_BY_FIVE",
+  DAILY_CHALLENGE = "DAILY_CHALLENGE",
+}
+
 export enum MoveDirection {
   UP = "UP",
   DOWN = "DOWN",

@@ -39,7 +39,7 @@ const useHighScoresStore = create<HighScoresState>()((set, get) => ({
         lastPostedGameId,
       };
     }
-    return { ...state };
+    return state;
   }),
   openHighScoresDialog: () =>
     set((state) => ({ ...state, showHighScoresDialog: true })),
