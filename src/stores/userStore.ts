@@ -6,7 +6,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 interface UserState {
-  username: string | null;
+  username: string;
   clientId: string;
   init: () => void;
   setUsername: (username: string) => void;
@@ -27,7 +27,7 @@ const useUserStore = create<UserState>()((set, get) => ({
         clientId = uuidv4();
         window.localStorage.setItem(LOCAL_STORAGE_CLIENT_ID, clientId);
       }
-      const username = window.localStorage.getItem(LOCAL_STORAGE_USERNAME);
+      const username = window.localStorage.getItem(LOCAL_STORAGE_USERNAME) ?? '';
       return { clientId, username };
     }),
 

@@ -12,3 +12,4 @@ export const MERGABLES = [
 export const LOCAL_STORAGE_GAME_STATE = "gameState";
 export const LOCAL_STORAGE_CLIENT_ID = "clientId";
 export const LOCAL_STORAGE_USERNAME = "username";
+export const LAST_POSTED_GAME_ID = "lastPostedGameId";

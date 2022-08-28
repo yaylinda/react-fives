@@ -36,6 +36,7 @@ function GameOverDialog() {
 
   const canPostHighScore = lastPostedGameId !== currentGameId;
 
+  // TOOD (bug) - dialog pops up on refresh of page
   // TODO - show bar chart or some cool visualization of merged/generated
   return (
     <Dialog

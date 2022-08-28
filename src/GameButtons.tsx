@@ -61,7 +61,7 @@ function GameButtons() {
   const [showConfirmRestartDialog, setShowConfirmRestartDialog] =
     useState<boolean>(false);
   const { hasStarted, isGameOver, newGame } = useGameStore();
-  const {resetPosting} = useHighScoresStore();
+  const { resetPosting } = useHighScoresStore();
 
   /**
    *
@@ -69,16 +69,18 @@ function GameButtons() {
    */
   const renderPrePostGameButtons = () => {
     return (
-      <Button
-        variant="contained"
-        onClick={() => {
+      <Box sx={{ display: "flex", flexDirection: "column", width: 270 }}>
+        <Button
+          variant="contained"
+          onClick={() => {
             resetPosting();
             newGame();
-        }}
-        sx={{ color: colors.LIGHT }}
-      >
-        <Typography>New Game</Typography>
-      </Button>
+          }}
+          sx={{ color: colors.LIGHT }}
+        >
+          <Typography>New Game</Typography>
+        </Button>
+      </Box>
     );
   };
 
@@ -88,7 +90,7 @@ function GameButtons() {
    */
   const renderInGameButtons = () => {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3, width: 270 }}>
         <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
           <OnScreenKey dir={MoveDirection.LEFT} />
           <Box
@@ -104,12 +106,7 @@ function GameButtons() {
           </Box>
           <OnScreenKey dir={MoveDirection.RIGHT} />
         </Box>
-        <Button
-          size="large"
-          variant="outlined"
-          onClick={() => setShowConfirmRestartDialog(true)}
-          sx={{ borderWidth: 2, color: colors.LIGHT }}
-        >
+        <Button onClick={() => setShowConfirmRestartDialog(true)}>
           <Typography>Restart</Typography>
         </Button>
       </Box>
@@ -130,6 +127,7 @@ function GameButtons() {
         marginTop: 3,
         display: "flex",
         justifyContent: "center",
+        width: 270
       }}
     >
       {!hasStarted || isGameOver

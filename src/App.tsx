@@ -23,12 +23,13 @@ const ANIMATION_DURATION = 100;
 
 function App() {
   const { move, restoreState } = useGameStore();
-  const { init } = useUserStore();
-  const { openHighScoresDialog } = useHighScoresStore();
+  const { init: initUserStore } = useUserStore();
+  const { init: initHighScoresStore, openHighScoresDialog } = useHighScoresStore();
 
   useEffect(() => {
     restoreState();
-    init();
+    initUserStore();
+    initHighScoresStore();
   }, []);
 
   /**
@@ -94,10 +95,11 @@ function App() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: 'center',
           marginTop: 5,
         }}
       >
-        <Button onClick={openHighScoresDialog}>
+        <Button sx={{ width: 270 }} onClick={openHighScoresDialog}>
           <Typography>Show high scores</Typography>
         </Button>
       </Box>
