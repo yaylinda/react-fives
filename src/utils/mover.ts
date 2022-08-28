@@ -1,5 +1,5 @@
-import { TileData, MoveDirection, IntermediateTileData } from "../types";
-import { NUM_ROWS, NUM_COLS, START_NUM_2, START_NUM_3 } from "./constants";
+import { TileData, MoveDirection, IntermediateTileData, GameBoardConfig } from "../types";
+import { START_NUM_2, START_NUM_3 } from "./constants";
 import { initIntermediateBoard } from "./utils";
 
 /**
@@ -10,12 +10,13 @@ import { initIntermediateBoard } from "./utils";
  */
 export const moveTiles = (
   board: TileData[][],
-  dir: MoveDirection
+  dir: MoveDirection,
+  config: GameBoardConfig,
 ): {
   intermediateBoard: IntermediateTileData[][];
   moved: { rows: number[]; cols: number[] };
 } => {
-  const intermediateBoard: IntermediateTileData[][] = initIntermediateBoard();
+  const intermediateBoard: IntermediateTileData[][] = initIntermediateBoard(config);
 
   const movedRows = [];
   const movedCols = [];
@@ -23,13 +24,13 @@ export const moveTiles = (
   switch (dir) {
     case MoveDirection.LEFT:
       // Put all cells from the first column into the intermediate board
-      for (let row = 0; row < NUM_ROWS; row++) {
+      for (let row = 0; row < config.numRows; row++) {
         intermediateBoard[row][0].tiles.push(board[row][0]);
       }
 
       // Combine or move all the cells to the left
-      for (let row = 0; row < NUM_ROWS; row++) {
-        for (let col = 1; col < NUM_COLS; col++) {
+      for (let row = 0; row < config.numRows; row++) {
+        for (let col = 1; col < config.numCols; col++) {
           const cellValue = board[row][col];
           const leftCellValue = board[row][col - 1];
 
@@ -45,15 +46,15 @@ export const moveTiles = (
       break;
     case MoveDirection.RIGHT:
       // Put all cells from the last column into the intermediate board
-      for (let row = 0; row < NUM_ROWS; row++) {
-        intermediateBoard[row][NUM_COLS - 1].tiles.push(
-          board[row][NUM_COLS - 1]
+      for (let row = 0; row < config.numRows; row++) {
+        intermediateBoard[row][config.numCols - 1].tiles.push(
+          board[row][config.numCols - 1]
         );
       }
 
       // Combine or move all the cells to the right
-      for (let row = 0; row < NUM_ROWS; row++) {
-        for (let col = NUM_COLS - 2; col >= 0; col--) {
+      for (let row = 0; row < config.numRows; row++) {
+        for (let col = config.numCols - 2; col >= 0; col--) {
           const cellValue = board[row][col];
           const rightCellValue = board[row][col + 1];
 
@@ -69,13 +70,13 @@ export const moveTiles = (
       break;
     case MoveDirection.UP:
       // Put all cells from the first row into the intermediate board
-      for (let col = 0; col < NUM_COLS; col++) {
+      for (let col = 0; col < config.numCols; col++) {
         intermediateBoard[0][col].tiles.push(board[0][col]);
       }
 
       // Combine or move all the cells to the top
-      for (let row = 1; row < NUM_ROWS; row++) {
-        for (let col = 0; col < NUM_COLS; col++) {
+      for (let row = 1; row < config.numRows; row++) {
+        for (let col = 0; col < config.numCols; col++) {
           const cellValue = board[row][col];
           const upCellValue = board[row - 1][col];
 
@@ -91,15 +92,15 @@ export const moveTiles = (
       break;
     case MoveDirection.DOWN:
       // Put all cells from the last row into the intermediate board
-      for (let col = 0; col < NUM_COLS; col++) {
-        intermediateBoard[NUM_COLS - 1][col].tiles.push(
-          board[NUM_COLS - 1][col]
+      for (let col = 0; col < config.numCols; col++) {
+        intermediateBoard[config.numCols - 1][col].tiles.push(
+          board[config.numCols - 1][col]
         );
       }
 
       // Combine or move all the cells to the bottom
-      for (let row = NUM_ROWS - 2; row >= 0; row--) {
-        for (let col = 0; col < NUM_COLS; col++) {
+      for (let row = config.numRows - 2; row >= 0; row--) {
+        for (let col = 0; col < config.numCols; col++) {
           const cellValue = board[row][col];
           const downCellValue = board[row + 1][col];
 

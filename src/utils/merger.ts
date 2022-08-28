@@ -1,6 +1,5 @@
 import { sum } from "lodash";
-import { IntermediateTileData, TileData } from "../types";
-import { NUM_ROWS, NUM_COLS } from "./constants";
+import { GameBoardConfig, IntermediateTileData, TileData } from "../types";
 import { initBoard } from "./utils";
 
 /**
@@ -9,7 +8,8 @@ import { initBoard } from "./utils";
  * @returns
  */
 export const mergeTiles = (
-  intermediateBoard: IntermediateTileData[][]
+  intermediateBoard: IntermediateTileData[][],
+  config: GameBoardConfig,
 ): {
   board: TileData[][];
   merged: { [key in number]: number };
@@ -17,9 +17,9 @@ export const mergeTiles = (
 } => {
   let moveScore = 0;
   const merged: { [key in number]: number } = {};
-  const newBoard = initBoard();
-  for (let row = 0; row < NUM_ROWS; row++) {
-    for (let col = 0; col < NUM_COLS; col++) {
+  const newBoard = initBoard(config);
+  for (let row = 0; row < config.numRows; row++) {
+    for (let col = 0; col < config.numCols; col++) {
       const tiles = intermediateBoard[row][col].tiles.filter(
         (tile) => tile.value > 0
       );

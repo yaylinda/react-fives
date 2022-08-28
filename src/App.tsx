@@ -31,10 +31,10 @@ function App() {
   const { gameMode: mode, init: initModeStore, openNewGameModeSelectionDialog } = useGameModeStore();
 
   useEffect(() => {
+    initModeStore();
     restoreState();
     initUserStore();
     initHighScoresStore();
-    initModeStore();
   }, []);
 
   /**

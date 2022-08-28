@@ -1,10 +1,10 @@
 import {
   Coordinates,
+  GameBoardConfig,
   IntermediateTileData,
   TileData,
   TileLocations,
 } from "../types";
-import { NUM_COLS, NUM_ROWS } from "./constants";
 
 /**
  *
@@ -14,12 +14,13 @@ import { NUM_COLS, NUM_ROWS } from "./constants";
  */
 export const convertBoardToLocations = (
   currentBoard: TileData[][],
-  intermediateBoard: IntermediateTileData[][]
+  intermediateBoard: IntermediateTileData[][],
+  config: GameBoardConfig,
 ): TileLocations => {
   let tileLocations: TileLocations = {};
 
-  for (let row = 0; row < NUM_ROWS; row++) {
-    for (let col = 0; col < NUM_COLS; col++) {
+  for (let row = 0; row < config.numRows; row++) {
+    for (let col = 0; col < config.numCols; col++) {
       const coords: Coordinates = { row, col };
 
       for (let tile of intermediateBoard[row][col].tiles) {

@@ -1,30 +1,35 @@
 import { Box } from "@mui/material";
+import useGameModeStore from "./stores/gameModeStore";
 import useGameStore from "./stores/gameStore";
 import { colors } from "./theme";
 import Tile from "./Tile";
-import { NUM_COLS, NUM_ROWS } from "./utils/constants";
+import { getBoardConfig } from './utils/utils';
 
 function Board() {
   const { tileLocations } = useGameStore();
+  const { gameMode } = useGameModeStore();
+  const { numRows, numCols, tileSize, tileSpacing } = getBoardConfig(gameMode);
+
+  const spacing = `${tileSpacing}px`;
 
   return (
     <Box sx={{ position: "relative" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-        {Array.from(Array(NUM_ROWS)).map((_, r) => (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: spacing }}>
+        {Array.from(Array(numRows)).map((_, r) => (
           <Box
             key={`row_${r}`}
             sx={{
               display: "flex",
               flexDirection: "row",
-              gap: "5px",
+              gap: spacing,
             }}
           >
-            {Array.from(Array(NUM_COLS)).map((_, c) => (
+            {Array.from(Array(numCols)).map((_, c) => (
               <Box
                 key={`row_${r}_col_${c}`}
                 sx={{
-                  height: 50,
-                  width: 50,
+                  height: tileSize,
+                  width: tileSize,
                   backgroundColor: colors.DARK,
                   borderRadius: "50%",
                 }}

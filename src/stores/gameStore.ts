@@ -1,8 +1,6 @@
 import create from "zustand";
 import { TileData, MoveDirection, TileLocations } from "../types";
 import {
-  NUM_ROWS,
-  NUM_COLS,
   LOCAL_STORAGE_GAME_STATE,
 } from "../utils/constants";
 import { getCoordinatesForNewTile } from "../utils/coordinates";
@@ -10,8 +8,9 @@ import { generateTileValue } from "../utils/generator";
 import { convertBoardToLocations } from "../utils/locations";
 import { mergeTiles } from "../utils/merger";
 import { moveTiles } from "../utils/mover";
-import { initBoard, initIntermediateBoard, isGameOver } from "../utils/utils";
+import { getBoardConfig, initBoard, initIntermediateBoard, isGameOver } from "../utils/utils";
 import { v4 as uuidv4 } from "uuid";
+import useGameModeStore from "./gameModeStore";
 
 export interface GameState {
   hasStarted: boolean;
@@ -35,7 +34,7 @@ export interface GameState {
 
 const useGameStore = create<GameState>()((set, get) => ({
   hasStarted: false,
-  board: initBoard(),
+  board: initBoard(getBoardConfig(useGameModeStore.getState().gameMode)),
   tileLocations: {},
   isGameOver: false,
   showGameOverDialog: false,
@@ -58,9 +57,11 @@ const useGameStore = create<GameState>()((set, get) => ({
         return state;
       }
 
+      const config = getBoardConfig(useGameModeStore.getState().gameMode);
+
       // Move and merge the tiles.
-      const { intermediateBoard, moved } = moveTiles(state.board, dir);
-      const { board, merged, score } = mergeTiles(intermediateBoard);
+      const { intermediateBoard, moved } = moveTiles(state.board, dir, config);
+      const { board, merged, score } = mergeTiles(intermediateBoard, config);
 
       // Update the count of the tiles that got merged.
       for (let key in merged) {
@@ -73,7 +74,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       // Put a new tile on the board (if applicable).
       let usedNextValue = false;
       let moves = state.moves;
-      const coords = getCoordinatesForNewTile(board, dir, moved);
+      const coords = getCoordinatesForNewTile(board, dir, moved, config);
       if (coords != null) {
         moves = moves + 1;
         usedNextValue = true;
@@ -92,13 +93,13 @@ const useGameStore = create<GameState>()((set, get) => ({
       }
 
       // Check if game is over.
-      const gameOver = isGameOver(JSON.parse(JSON.stringify(board)));
+      const gameOver = isGameOver(JSON.parse(JSON.stringify(board)), config);
 
       // Persist the updated state in localStorage.
       const updatedState = {
         ...state,
         board: [...board],
-        tileLocations: convertBoardToLocations(board, intermediateBoard),
+        tileLocations: convertBoardToLocations(board, intermediateBoard, config),
         isGameOver: gameOver,
         showGameOverDialog: gameOver,
         moves: moves,
@@ -122,10 +123,13 @@ const useGameStore = create<GameState>()((set, get) => ({
    */
   newGame: () =>
     set((state) => {
-      const board = initBoard();
+
+      const config = getBoardConfig(useGameModeStore.getState().gameMode);
+
+      const board = initBoard(config);
 
       const newValue = generateTileValue({}, {}, 0);
-      board[(NUM_ROWS - 1) / 2][(NUM_COLS - 1) / 2] = {
+      board[config.startRow][config.startCol] = {
         id: `tile_${0}`,
         value: newValue,
         isNew: true,
@@ -135,7 +139,7 @@ const useGameStore = create<GameState>()((set, get) => ({
       const updatedState = {
         ...state,
         board: board,
-        tileLocations: convertBoardToLocations(board, initIntermediateBoard()),
+        tileLocations: convertBoardToLocations(board, initIntermediateBoard(config), config),
         hasStarted: true,
         isGameOver: false,
         showGameOverDialog: false,

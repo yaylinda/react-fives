@@ -1,5 +1,4 @@
-import { TileData, MoveDirection, IntermediateTileData } from "../types";
-import { NUM_ROWS, NUM_COLS } from "./constants";
+import { TileData, MoveDirection, IntermediateTileData, GameMode, GameBoardConfig } from "../types";
 import { mergeTiles } from "./merger";
 import { moveTiles } from "./mover";
 
@@ -29,9 +28,9 @@ export const convertKeyCodeToDirection = (
  *
  * @returns
  */
-export const initBoard = (): TileData[][] => {
-  return Array.from(Array(NUM_ROWS)).map((_, r) =>
-    Array.from(Array(NUM_COLS)).map((_, c) => ({
+export const initBoard = (config: GameBoardConfig): TileData[][] => {
+  return Array.from(Array(config.numRows)).map((_, r) =>
+    Array.from(Array(config.numCols)).map((_, c) => ({
       id: "",
       value: 0,
       isNew: false,
@@ -44,9 +43,9 @@ export const initBoard = (): TileData[][] => {
  *
  * @returns
  */
-export const initIntermediateBoard = (): IntermediateTileData[][] => {
-  return Array.from(Array(NUM_ROWS)).map((_, r) =>
-    Array.from(Array(NUM_COLS)).map((_, c) => ({ tiles: [] }))
+export const initIntermediateBoard = (config: GameBoardConfig): IntermediateTileData[][] => {
+  return Array.from(Array(config.numRows)).map((_, r) =>
+    Array.from(Array(config.numCols)).map((_, c) => ({ tiles: [] }))
   );
 };
 
@@ -55,32 +54,33 @@ export const initIntermediateBoard = (): IntermediateTileData[][] => {
  * @param board
  * @returns
  */
-export const isGameOver = (board: TileData[][]): boolean => {
-  const boardFull = isBoardFull(board);
+export const isGameOver = (board: TileData[][], config: GameBoardConfig): boolean => {
+  const boardFull = isBoardFull(board, config);
 
   if (!boardFull) {
     return false;
   }
 
-  const left = moveAndMerge(board, MoveDirection.LEFT);
-  const right = moveAndMerge(board, MoveDirection.RIGHT);
-  const up = moveAndMerge(board, MoveDirection.UP);
-  const down = moveAndMerge(board, MoveDirection.DOWN);
+  const left = moveAndMerge(board, MoveDirection.LEFT, config);
+  const right = moveAndMerge(board, MoveDirection.RIGHT, config);
+  const up = moveAndMerge(board, MoveDirection.UP, config);
+  const down = moveAndMerge(board, MoveDirection.DOWN, config);
 
   return [
-    isSame(board, left),
-    isSame(board, right),
-    isSame(board, up),
-    isSame(board, down),
+    isSame(board, left, config),
+    isSame(board, right, config),
+    isSame(board, up, config),
+    isSame(board, down, config),
   ].every((v) => v);
 };
 
 const moveAndMerge = (
   board: TileData[][],
-  dir: MoveDirection
+  dir: MoveDirection,
+  config: GameBoardConfig,
 ): TileData[][] => {
-  const { intermediateBoard } = moveTiles(board, dir);
-  return mergeTiles(intermediateBoard).board;
+  const { intermediateBoard } = moveTiles(board, dir, config);
+  return mergeTiles(intermediateBoard, config).board;
 };
 
 /**
@@ -88,9 +88,9 @@ const moveAndMerge = (
  * @param board
  * @returns
  */
-const isBoardFull = (board: TileData[][]): boolean => {
-  for (let row = 0; row < NUM_ROWS; row++) {
-    for (let col = 0; col < NUM_COLS; col++) {
+const isBoardFull = (board: TileData[][], config: GameBoardConfig): boolean => {
+  for (let row = 0; row < config.numRows; row++) {
+    for (let col = 0; col < config.numCols; col++) {
       if (board[row][col].value === 0) {
         return false;
       }
@@ -105,13 +105,50 @@ const isBoardFull = (board: TileData[][]): boolean => {
  * @param board2
  * @returns
  */
-const isSame = (board1: TileData[][], board2: TileData[][]): boolean => {
-  for (let row = 0; row < NUM_ROWS; row++) {
-    for (let col = 0; col < NUM_COLS; col++) {
+const isSame = (board1: TileData[][], board2: TileData[][], config: GameBoardConfig): boolean => {
+  for (let row = 0; row < config.numRows; row++) {
+    for (let col = 0; col < config.numCols; col++) {
       if (board1[row][col].value !== board2[row][col].value) {
         return false;
       }
     }
   }
   return true;
+};
+
+/**
+ * 
+ * @param gameMode 
+ * @returns 
+ */
+export const getBoardConfig = (gameMode: GameMode): GameBoardConfig => {
+  switch (gameMode) {
+    case GameMode.FOUR_BY_FOUR:
+      return {
+        numRows: 4,
+        numCols: 4,
+        tileSize: 60,
+        tileSpacing: 10,
+        startRow: 1,
+        startCol: 1,
+      };
+    case GameMode.FIVE_BY_FIVE:
+      return {
+        numRows: 5,
+        numCols: 5,
+        tileSize: 50,
+        tileSpacing: 5,
+        startRow: 2,
+        startCol: 2,
+      };
+    case GameMode.DAILY_CHALLENGE:
+      return {
+        numRows: 5,
+        numCols: 5,
+        tileSize: 50,
+        tileSpacing: 5,
+        startRow: 2,
+        startCol: 2,
+      };
+  }
 };

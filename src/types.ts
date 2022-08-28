@@ -55,3 +55,12 @@ export interface HighScore {
 export interface HighScoreDoc extends HighScore {
   timestamp: Timestamp;
 }
+
+export interface GameBoardConfig {
+  numRows: number;
+  numCols: number;
+  tileSize: number;
+  tileSpacing: number;
+  startRow: number;
+  startCol: number;
+}

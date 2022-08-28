@@ -1,6 +1,5 @@
 import { shuffle } from "lodash";
-import { TileData, MoveDirection, Coordinates } from "../types";
-import { NUM_ROWS, NUM_COLS } from "./constants";
+import { TileData, MoveDirection, Coordinates, GameBoardConfig } from "../types";
 
 /**
  *
@@ -10,7 +9,8 @@ import { NUM_ROWS, NUM_COLS } from "./constants";
 export const getCoordinatesForNewTile = (
   board: TileData[][],
   dir: MoveDirection,
-  moved: { cols: number[]; rows: number[] }
+  moved: { cols: number[]; rows: number[] },
+  config: GameBoardConfig
 ): Coordinates | null => {
   switch (dir) {
     case MoveDirection.LEFT: {
@@ -19,8 +19,8 @@ export const getCoordinatesForNewTile = (
       }
 
       const values = [];
-      for (let row = 0; row < NUM_ROWS; row++) {
-        values.push(board[row][NUM_COLS - 1].value);
+      for (let row = 0; row < config.numRows; row++) {
+        values.push(board[row][config.numCols - 1].value);
       }
 
       const emptyIndices = getEmptyIndices(values);
@@ -29,7 +29,7 @@ export const getCoordinatesForNewTile = (
       }
 
       const index = shuffle(moved.rows)[0];
-      return { col: NUM_COLS - 1, row: index };
+      return { col: config.numCols - 1, row: index };
     }
     case MoveDirection.RIGHT: {
       if (moved.rows.length === 0) {
@@ -37,7 +37,7 @@ export const getCoordinatesForNewTile = (
       }
 
       const values = [];
-      for (let row = 0; row < NUM_ROWS; row++) {
+      for (let row = 0; row < config.numRows; row++) {
         values.push(board[row][0].value);
       }
 
@@ -55,8 +55,8 @@ export const getCoordinatesForNewTile = (
       }
 
       const values = [];
-      for (let col = 0; col < NUM_COLS; col++) {
-        values.push(board[NUM_ROWS - 1][col].value);
+      for (let col = 0; col < config.numCols; col++) {
+        values.push(board[config.numRows - 1][col].value);
       }
 
       const emptyIndices = getEmptyIndices(values);
@@ -65,7 +65,7 @@ export const getCoordinatesForNewTile = (
       }
 
       const index = shuffle(moved.cols)[0];
-      return { col: index, row: NUM_ROWS - 1 };
+      return { col: index, row: config.numRows - 1 };
     }
     case MoveDirection.DOWN: {
       if (moved.cols.length === 0) {
@@ -73,7 +73,7 @@ export const getCoordinatesForNewTile = (
       }
 
       const values = [];
-      for (let col = 0; col < NUM_COLS; col++) {
+      for (let col = 0; col < config.numCols; col++) {
         values.push(board[0][col].value);
       }
 
