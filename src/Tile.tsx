@@ -1,9 +1,11 @@
-import { Coordinates, TileData } from "./types";
+import { Coordinates, GameBoardConfig, TileData } from "./types";
 import { Box } from "@mui/material";
 import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
-import { useEffect, useState } from "react";
-import { START_NUM_2, START_NUM_3 } from "./utils/constants";
+import { useEffect, useMemo, useState } from "react";
+import { STARTING_NUMS, START_NUM_2, START_NUM_3 } from "./utils/constants";
+import useGameModeStore from "./stores/gameModeStore";
+import { getBoardConfig } from "./utils/utils";
 
 /**
  * Font sizes
@@ -14,18 +16,22 @@ const FOUR_DIGIT_FONT_SIZE = 14;
 const FIVE_DIGIT_FONT_SIZE = 10;
 
 /**
- * Tile sizes
+ * 
+ * @param isStartingNum 
+ * @param config 
+ * @returns 
  */
-const TILE_WITH_BORDER = 42;
-const TILE_WITHOUT_BORDER = 50;
-const BORDER_WIDTH = 4;
+const getTileSize = (isStartingNum: boolean, config: GameBoardConfig) => ({
+  height: isStartingNum ? config.tileSize : config.tileWithBorder,
+  width: isStartingNum ? config.tileSize : config.tileWithBorder,
+  borderStyle: isStartingNum ? "none" : "solid",
+  borderWidth: isStartingNum ? 0 : config.borderWidth,
+});
 
 /**
  * Default tile styles
  */
 const DEFAULT = {
-  height: TILE_WITH_BORDER,
-  width: TILE_WITH_BORDER,
   borderRadius: "50%",
   display: "flex",
   justifyContent: "center",
@@ -34,8 +40,6 @@ const DEFAULT = {
   fontSize: DEFAULT_FONT_SIZE,
   backgroundColor: colors.LIGHT,
   color: colors.DARK,
-  borderWidth: BORDER_WIDTH,
-  borderStyle: "solid",
 };
 
 /**
@@ -43,18 +47,12 @@ const DEFAULT = {
  */
 const STYLES: { [key in string]: SystemStyleObject<typeof theme> } = {
   tile_2: {
-    height: TILE_WITHOUT_BORDER,
-    width: TILE_WITHOUT_BORDER,
     backgroundColor: colors.BRAND,
     color: colors.LIGHT,
-    border: "none",
   },
   tile_3: {
-    height: TILE_WITHOUT_BORDER,
-    width: TILE_WITHOUT_BORDER,
     backgroundColor: colors.ACCENT,
     color: colors.DARK,
-    border: "none",
   },
   tile_5: {
     borderColor: "#66c2a5",
@@ -109,28 +107,6 @@ const STYLES: { [key in string]: SystemStyleObject<typeof theme> } = {
   },
 };
 
-const SMALL_TILE_WITHOUT_BORDER = {
-  height: 20,
-  width: 20,
-};
-
-const SMALL_TILE_WITH_BORDER = {
-  height: 12,
-  width: 12,
-  borderWidth: 4,
-};
-
-const getPixelsFromCoordinates = ({ row, col }: Coordinates) => {
-  const top = row * 50 + row * 5;
-  const left = col * 50 + col * 5;
-  return {
-    top,
-    left,
-    bottom: top - 50,
-    right: left - 50,
-  };
-};
-
 interface TileProps {
   tile: TileData;
   coordinates: Coordinates;
@@ -144,9 +120,12 @@ interface TileProps {
  */
 function Tile({ tile, coordinates }: TileProps) {
   const { id, value, isNew, isMerge } = tile;
-  const { top, left, bottom, right } = getPixelsFromCoordinates(coordinates);
-
   const [scale, setScale] = useState(isNew ? 0 : 1);
+  const { gameMode } = useGameModeStore();
+  const config = getBoardConfig(gameMode);
+  const isStartingNum = STARTING_NUMS.includes(value);
+  const top = coordinates.row * config.tileSize + coordinates.row * config.tileSpacing;
+  const left = coordinates.col * config.tileSize + coordinates.col * config.tileSpacing;
 
   useEffect(() => {
     if (isMerge) {
@@ -171,6 +150,7 @@ function Tile({ tile, coordinates }: TileProps) {
       sx={[
         DEFAULT,
         STYLES[`tile_${value}`],
+        getTileSize(isStartingNum, config),
         {
           zIndex: isNew ? 0 : value,
           position: "absolute",
@@ -186,6 +166,17 @@ function Tile({ tile, coordinates }: TileProps) {
     </Box>
   );
 }
+
+const SMALL_TILE_WITHOUT_BORDER = {
+  height: 20,
+  width: 20,
+};
+
+const SMALL_TILE_WITH_BORDER = {
+  height: 12,
+  width: 12,
+  borderWidth: 4,
+};
 
 /**
  *

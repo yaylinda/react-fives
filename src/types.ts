@@ -63,4 +63,6 @@ export interface GameBoardConfig {
   tileSpacing: number;
   startRow: number;
   startCol: number;
+  tileWithBorder: number;
+  borderWidth: number;
 }

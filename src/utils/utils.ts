@@ -131,6 +131,8 @@ export const getBoardConfig = (gameMode: GameMode): GameBoardConfig => {
         tileSpacing: 10,
         startRow: 1,
         startCol: 1,
+        tileWithBorder: 52,
+        borderWidth: 4,
       };
     case GameMode.FIVE_BY_FIVE:
       return {
@@ -140,6 +142,8 @@ export const getBoardConfig = (gameMode: GameMode): GameBoardConfig => {
         tileSpacing: 5,
         startRow: 2,
         startCol: 2,
+        tileWithBorder: 42,
+        borderWidth: 4,
       };
     case GameMode.DAILY_CHALLENGE:
       return {
@@ -149,6 +153,8 @@ export const getBoardConfig = (gameMode: GameMode): GameBoardConfig => {
         tileSpacing: 5,
         startRow: 2,
         startCol: 2,
+        tileWithBorder: 42,
+        borderWidth: 4,
       };
   }
 };
