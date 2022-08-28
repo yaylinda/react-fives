@@ -10,14 +10,14 @@ import {
   TextField,
 } from "@mui/material";
 import DialogTransition from "./DialogTransition";
-import useHighScoresStore from "./stores/highScoresStore";
-import { colors } from "./theme";
+import useHighScoresStore from "../stores/highScoresStore";
+import { colors } from "../theme";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import useUserStore from "./stores/userStore";
-import useGameStore from "./stores/gameStore";
-import { HighScore } from "./types";
-import { postHighScore } from "./api/highScores";
+import useUserStore from "../stores/userStore";
+import useGameStore from "../stores/gameStore";
+import { HighScore } from "../types";
+import { postHighScore } from "../api/highScores";
 
 function PostHighScoreDialog() {
   const { moves, score, merged, generated, currentGameId } = useGameStore();
@@ -31,6 +31,9 @@ function PostHighScoreDialog() {
   } = useHighScoresStore();
   const { clientId, username, setUsername } = useUserStore();
 
+  /**
+   * 
+   */
   const postScore = async () => {
     const highScore: HighScore = {
       username: username ? username : clientId,
@@ -52,6 +55,10 @@ function PostHighScoreDialog() {
     }
   };
 
+  /**
+   * 
+   * @param event 
+   */
   const onUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };

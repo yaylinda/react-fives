@@ -11,16 +11,15 @@ import {
   Typography,
 } from "@mui/material";
 import Game from "./Game";
-import GameOverDialog from "./GameOverDialog";
+import GameOverDialog from "./dialogs/GameOverDialog";
 import theme, { colors } from "./theme";
 import useUserStore from "./stores/userStore";
 import moment from "moment";
 import useHighScoresStore from "./stores/highScoresStore";
-import HighScoresDialog from "./HighScoresDialog";
-import PostHighScoreDialog from "./PostHighScoreDialog";
+import HighScoresDialog from "./dialogs/HighScoresDialog";
+import PostHighScoreDialog from "./dialogs/PostHighScoreDialog";
 import useGameModeStore from "./stores/gameModeStore";
-import { GameMode } from "./types";
-import NewGameModeSelectionDialog from "./NewGameModeSelectionDialog";
+import NewGameModeSelectionDialog from "./dialogs/NewGameModeSelectionDialog";
 import { BOARD_WIDTH } from "./styles";
 
 const ANIMATION_DURATION = 100;

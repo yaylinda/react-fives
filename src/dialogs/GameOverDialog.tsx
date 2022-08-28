@@ -8,11 +8,10 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { useState } from "react";
 import DialogTransition from "./DialogTransition";
-import useGameStore from "./stores/gameStore";
-import useHighScoresStore from "./stores/highScoresStore";
-import { colors } from "./theme";
+import useGameStore from "../stores/gameStore";
+import useHighScoresStore from "../stores/highScoresStore";
+import { colors } from "../theme";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 function GameOverDialog() {

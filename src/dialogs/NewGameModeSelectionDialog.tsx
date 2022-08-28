@@ -1,16 +1,16 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import DialogTransition from "./DialogTransition";
-import useGameModeStore from "./stores/gameModeStore";
-import useGameStore from "./stores/gameStore";
-import { colors } from "./theme";
+import useGameModeStore from "../stores/gameModeStore";
+import useGameStore from "../stores/gameStore";
+import { colors } from "../theme";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import Filter4Icon from '@mui/icons-material/Filter4';
 import Filter5Icon from '@mui/icons-material/Filter5';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useState } from "react";
-import { GameMode } from "./types";
-import useHighScoresStore from "./stores/highScoresStore";
+import { GameMode } from "../types";
+import useHighScoresStore from "../stores/highScoresStore";
 
 const styles = {
   toggleButtonStyle: { width: '100%', justifyContent: 'flex-start', gap: 2, border: 'none' },

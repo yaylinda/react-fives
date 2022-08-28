@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import { orderBy } from "lodash";
 import { useEffect, useState } from "react";
-import { fetchHighScores } from "./api/highScores";
+import { fetchHighScores } from "../api/highScores";
 import DialogTransition from "./DialogTransition";
-import useHighScoresStore from "./stores/highScoresStore";
-import { colors } from "./theme";
-import { HighScoreDoc } from "./types";
+import useHighScoresStore from "../stores/highScoresStore";
+import { colors } from "../theme";
+import { HighScoreDoc } from "../types";
 
 const HighScoreRow = ({
   highScore,
