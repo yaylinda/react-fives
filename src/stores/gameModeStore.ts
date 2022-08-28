@@ -3,10 +3,10 @@ import create from "zustand";
 import { GameMode } from "../types";
 import { GAME_MODE } from "../utils/constants";
 
-export const DEFAULT_MODE = GameMode.FIVE_BY_FIVE;
+export const DEFAULT_GAME_MODE = GameMode.FIVE_BY_FIVE;
 
 interface GameModeState {
-  mode: GameMode,
+  gameMode: GameMode,
   showNewGameModeSelectionDialog: boolean;
   init: () => void,
   updateMode: (mode: GameMode) => void,
@@ -15,27 +15,37 @@ interface GameModeState {
 }
 
 const useGameModeStore = create<GameModeState>()((set, get) => ({
-  mode: GameMode.FIVE_BY_FIVE,
+  gameMode: GameMode.FIVE_BY_FIVE,
   showNewGameModeSelectionDialog: false,
 
-  updateMode: (mode: GameMode) => set((state) => {
-    window.localStorage.setItem(GAME_MODE, mode);
-    return { ...state, mode }
+  /**
+   * 
+   * @param gameMode 
+   * @returns 
+   */
+  updateMode: (gameMode: GameMode) => set((state) => {
+    window.localStorage.setItem(GAME_MODE, gameMode);
+    return { ...state, gameMode }
   }),
+
+  /**
+   * 
+   * @returns 
+   */
   init: () => set((state) => {
     const gameMode = window.localStorage.getItem(GAME_MODE);
     if (gameMode) {
       return {
         ...state,
-        mode: GameMode[gameMode as keyof typeof GameMode]
+        gameMode: GameMode[gameMode as keyof typeof GameMode]
       }
     }
 
-    window.localStorage.setItem(GAME_MODE, DEFAULT_MODE);
+    window.localStorage.setItem(GAME_MODE, DEFAULT_GAME_MODE);
 
     return {
       ...state,
-      mode: DEFAULT_MODE,
+      gameMode: DEFAULT_GAME_MODE,
     };
   }),
 
