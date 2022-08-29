@@ -6,6 +6,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Tab,
+  Tabs,
 } from "@mui/material";
 import { orderBy } from "lodash";
 import { useEffect, useState } from "react";
@@ -13,7 +15,11 @@ import { fetchHighScores } from "../api/highScores";
 import DialogTransition from "./DialogTransition";
 import useHighScoresStore from "../stores/highScoresStore";
 import { colors } from "../theme";
-import { HighScoreDoc } from "../types";
+import { GameMode, HighScoreDoc } from "../types";
+import useGameModeStore from "../stores/gameModeStore";
+import Filter4Icon from '@mui/icons-material/Filter4';
+import Filter5Icon from '@mui/icons-material/Filter5';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const HighScoreRow = ({
   highScore,
@@ -45,14 +51,20 @@ const HighScoreRow = ({
 };
 
 function HighScoresDialog() {
-  const [highScores, setHighScores] = useState<HighScoreDoc[]>([]);
-  const { showHighScoresDialog, closeHighScoresDialog } = useHighScoresStore();
+  const { gameMode } = useGameModeStore();
+  const { showHighScoresDialog, fetching, highScores, closeHighScoresDialog, setHighScores, startFetchingHighScores } = useHighScoresStore();
+  const [gameModeTab, setGameModeTab] = useState<GameMode>(gameMode);
 
   useEffect(() => {
+    startFetchingHighScores();
     fetchHighScores().then((highScores) => {
       setHighScores(orderBy(highScores, ["score"], ["desc"]));
     });
   }, []);
+
+  useEffect(() => {
+    setGameModeTab(gameMode);
+  }, [gameMode]);
 
   return (
     <Dialog
@@ -62,8 +74,15 @@ function HighScoresDialog() {
       onClose={closeHighScoresDialog}
     >
       <DialogTitle sx={{ color: colors.LIGHT }}>High Scores</DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
-        {highScores.map((highScore, i) => (
+      <DialogContent>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={gameModeTab} onChange={(event, newTab) => setGameModeTab(newTab)}>
+            <Tab icon={<AccessTimeIcon />} value={GameMode.DAILY_CHALLENGE} />
+            <Tab icon={<Filter4Icon />} value={GameMode.FOUR_BY_FOUR} />
+            <Tab icon={<Filter5Icon />} value={GameMode.FIVE_BY_FIVE} />
+          </Tabs>
+        </Box>
+        {highScores.filter((hs) => hs.gameMode === gameModeTab).map((highScore, i) => (
           <HighScoreRow
             key={highScore.gameId}
             highScore={highScore}

@@ -52,6 +52,7 @@ function GameOverDialog() {
             display: "flex",
             flexDirection: "row",
             gap: 1,
+            flexWrap: 'wrap',
           }}
         >
           <DialogContentText sx={{ color: colors.LIGHT }}>

@@ -45,11 +45,11 @@ export interface HighScore {
   username: string;
   clientId: string;
   gameId: string;
-  gameSeed: string | null;
   score: number;
   moves: number;
   merged: { [key in number]: number };
   generated: { [key in number]: number };
+  gameMode: GameMode;
 }
 
 export interface HighScoreDoc extends HighScore {

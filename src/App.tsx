@@ -28,7 +28,7 @@ function App() {
   const { move, restoreState } = useGameStore();
   const { init: initUserStore } = useUserStore();
   const { init: initHighScoresStore, openHighScoresDialog } = useHighScoresStore();
-  const { gameMode: mode, init: initModeStore, openNewGameModeSelectionDialog } = useGameModeStore();
+  const { gameMode, init: initModeStore, openNewGameModeSelectionDialog } = useGameModeStore();
 
   useEffect(() => {
     initModeStore();

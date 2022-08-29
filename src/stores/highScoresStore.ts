@@ -1,15 +1,15 @@
 import { FlashOnOutlined } from "@mui/icons-material";
 import create from "zustand";
-import { HighScore } from "../types";
+import { HighScore, HighScoreDoc } from "../types";
 import { LAST_POSTED_GAME_ID } from "../utils/constants";
 
 interface HighScoresState {
-  loading: boolean;
   showHighScoresDialog: boolean;
   posting: boolean;
   successfullyPosted: boolean;
   showPostScoreDialog: boolean;
-  scores: HighScore[];
+  fetching: boolean;
+  highScores: HighScoreDoc[];
   lastPostedGameId: string | null;
   init: () => void;
   openHighScoresDialog: () => void;
@@ -20,16 +20,17 @@ interface HighScoresState {
   resetPosting: () => void;
   setPostedSuccess: (gameId: string) => void;
   setPostedFailed: () => void;
-  fetchHighScores: () => void;
+  startFetchingHighScores: () => void;
+  setHighScores: (highScores: HighScoreDoc[]) => void;
 }
 
 const useHighScoresStore = create<HighScoresState>()((set, get) => ({
-  loading: false,
   showHighScoresDialog: false,
   posting: false,
   successfullyPosted: false,
   showPostScoreDialog: false,
-  scores: [],
+  fetching: false,
+  highScores: [],
   lastPostedGameId: null,
   init: () => set((state) => {
     const lastPostedGameId = window.localStorage.getItem(LAST_POSTED_GAME_ID);
@@ -72,7 +73,12 @@ const useHighScoresStore = create<HighScoresState>()((set, get) => ({
       lastPostedGameId: null,
       showPostScoreDialog: false,
     })),
-  fetchHighScores: () => set((state) => state),
+  startFetchingHighScores: () => set((state) => ({ ...state, fetching: true })),
+  setHighScores: (highScores: HighScoreDoc[]) => set((state) => ({
+    ...state,
+    fetching: false,
+    highScores,
+  })),
 }));
 
 export default useHighScoresStore;

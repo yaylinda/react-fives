@@ -18,6 +18,7 @@ import useUserStore from "../stores/userStore";
 import useGameStore from "../stores/gameStore";
 import { HighScore } from "../types";
 import { postHighScore } from "../api/highScores";
+import useGameModeStore from "../stores/gameModeStore";
 
 function PostHighScoreDialog() {
   const { moves, score, merged, generated, currentGameId } = useGameStore();
@@ -30,6 +31,7 @@ function PostHighScoreDialog() {
     setPostedFailed,
   } = useHighScoresStore();
   const { clientId, username, setUsername } = useUserStore();
+  const { gameMode } = useGameModeStore();
 
   /**
    * 
@@ -39,11 +41,11 @@ function PostHighScoreDialog() {
       username: username ? username : clientId,
       clientId,
       gameId: currentGameId,
-      gameSeed: null,
       score,
       moves,
       merged,
       generated,
+      gameMode,
     };
 
     try {

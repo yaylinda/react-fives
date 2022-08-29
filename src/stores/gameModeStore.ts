@@ -15,7 +15,7 @@ interface GameModeState {
 }
 
 const useGameModeStore = create<GameModeState>()((set, get) => ({
-  gameMode: GameMode.FIVE_BY_FIVE,
+  gameMode: DEFAULT_GAME_MODE,
   showNewGameModeSelectionDialog: false,
 
   /**
