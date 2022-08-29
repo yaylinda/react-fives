@@ -31,7 +31,7 @@ const OnScreenKey = ({ dir }: { dir: MoveDirection }) => {
   return (
     <Button
       onClick={() => move(dir)}
-      sx={{ borderWidth: 1, borderStyle: "solid", borderColor: colors.BRAND }}
+      sx={{ borderWidth: 1, borderStyle: "solid", borderColor: colors.BRAND, width: 60, height: 60 }}
       color="info"
       size="large"
     >
@@ -53,22 +53,21 @@ function GameButtons() {
    */
   const renderInGameButtons = () => {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3, width: 270 }}>
-        <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", width: 270 }}>
+
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: 'center' }}>
+          <OnScreenKey dir={MoveDirection.UP} />
+        </Box>
+
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: 'center', gap: 8 }}>
           <OnScreenKey dir={MoveDirection.LEFT} />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: 1,
-            }}
-          >
-            <OnScreenKey dir={MoveDirection.UP} />
-            <OnScreenKey dir={MoveDirection.DOWN} />
-          </Box>
           <OnScreenKey dir={MoveDirection.RIGHT} />
         </Box>
+
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: 'center' }}>
+          <OnScreenKey dir={MoveDirection.DOWN} />
+        </Box>
+
       </Box>
     );
   };

@@ -21,6 +21,11 @@ import Filter4Icon from '@mui/icons-material/Filter4';
 import Filter5Icon from '@mui/icons-material/Filter5';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
+/**
+ * 
+ * @param param0 
+ * @returns 
+ */
 const HighScoreRow = ({
   highScore,
   index,
@@ -50,6 +55,18 @@ const HighScoreRow = ({
   );
 };
 
+const HighScoresList = () => {
+  return (
+    <Box>
+
+    </Box>
+  )
+}
+
+/**
+ * 
+ * @returns 
+ */
 function HighScoresDialog() {
   const { gameMode } = useGameModeStore();
   const { showHighScoresDialog, fetching, highScores, closeHighScoresDialog, setHighScores, startFetchingHighScores } = useHighScoresStore();
@@ -66,6 +83,21 @@ function HighScoresDialog() {
     setGameModeTab(gameMode);
   }, [gameMode]);
 
+  const renderHighScoresList = () => {
+    const scores = highScores.filter((hs) => hs.gameMode === gameModeTab);
+    if (scores.length === 0) {
+      return (<DialogContentText sx={{ color: colors.LIGHT }}>No scores yet</DialogContentText>);
+    }
+
+    return scores.map((highScore, i) => (
+      <HighScoreRow
+        key={highScore.gameId}
+        highScore={highScore}
+        index={i}
+      />))
+
+  }
+
   return (
     <Dialog
       open={showHighScoresDialog}
@@ -73,22 +105,23 @@ function HighScoresDialog() {
       keepMounted
       onClose={closeHighScoresDialog}
     >
-      <DialogTitle sx={{ color: colors.LIGHT }}>High Scores</DialogTitle>
+      <DialogTitle sx={{ color: colors.ACCENT }}>High Scores</DialogTitle>
       <DialogContent>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={gameModeTab} onChange={(event, newTab) => setGameModeTab(newTab)}>
+          <Tabs
+            value={gameModeTab}
+            onChange={(event, newTab) => setGameModeTab(newTab)}
+            sx={{
+              '& .MuiSvgIcon-fontSizeMedium': { color: colors.LIGHT },
+              '& .Mui-selected .MuiSvgIcon-fontSizeMedium': { color: colors.BRAND },
+              marginBottom: 2,
+            }}>
             <Tab icon={<AccessTimeIcon />} value={GameMode.DAILY_CHALLENGE} />
             <Tab icon={<Filter4Icon />} value={GameMode.FOUR_BY_FOUR} />
             <Tab icon={<Filter5Icon />} value={GameMode.FIVE_BY_FIVE} />
           </Tabs>
         </Box>
-        {highScores.filter((hs) => hs.gameMode === gameModeTab).map((highScore, i) => (
-          <HighScoreRow
-            key={highScore.gameId}
-            highScore={highScore}
-            index={i}
-          />
-        ))}
+        {renderHighScoresList()}
       </DialogContent>
       <DialogActions sx={{ justifyContent: "flex-end" }}>
         <Button onClick={closeHighScoresDialog}>OK</Button>

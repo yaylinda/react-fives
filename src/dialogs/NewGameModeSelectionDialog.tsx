@@ -8,12 +8,17 @@ import CheckIcon from '@mui/icons-material/Check';
 import Filter4Icon from '@mui/icons-material/Filter4';
 import Filter5Icon from '@mui/icons-material/Filter5';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GameMode } from "../types";
 import useHighScoresStore from "../stores/highScoresStore";
 
 const styles = {
-  toggleButtonStyle: { width: '100%', justifyContent: 'flex-start', gap: 2, border: 'none' },
+  toggleButtonStyle: {
+    width: '100%',
+    justifyContent: 'flex-start',
+    gap: 2,
+    border: 'none',
+  },
 }
 
 const NewGameModeSelectionDialog = () => {
@@ -22,6 +27,10 @@ const NewGameModeSelectionDialog = () => {
   const { newGame } = useGameStore();
   const { resetPosting } = useHighScoresStore();
   const [selectedMode, setSelectedMode] = useState<GameMode>(gameMode);
+
+  useEffect(() => {
+    setSelectedMode(gameMode);
+  }, [gameMode]);
 
   const startNewGame = () => {
     updateMode(selectedMode);
@@ -37,7 +46,7 @@ const NewGameModeSelectionDialog = () => {
       keepMounted
       onClose={closeNewGameModeSelectionDialog}
     >
-      <DialogTitle sx={{ color: colors.LIGHT }}>New Game?</DialogTitle>
+      <DialogTitle sx={{ color: colors.ACCENT }}>New Game?</DialogTitle>
       <DialogContent>
         <ToggleButtonGroup
           orientation="vertical"

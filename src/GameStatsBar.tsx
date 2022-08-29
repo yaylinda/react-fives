@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import useGameStore from "./stores/gameStore";
 import { PreviewTile } from "./Tile";
 
-function StatsBar() {
+function GameStatsBar() {
   const { hasStarted, moves, score, nextValue: nextValue } = useGameStore();
 
   if (!hasStarted) {
@@ -40,4 +40,4 @@ function StatsBar() {
   );
 }
 
-export default StatsBar;
+export default GameStatsBar;

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import Board from "./Board";
 import GameButtons from "./GameButtons";
-import StatsBar from "./StatsBar";
+import GameStatsBar from "./GameStatsBar";
 import { colors } from "./theme";
 
 /**
@@ -21,7 +21,7 @@ function Game() {
         marginTop: 3,
       }}
     >
-      <StatsBar />
+      <GameStatsBar />
       <Board />
       <GameButtons />
     </Box>

@@ -170,11 +170,13 @@ function Tile({ tile, coordinates }: TileProps) {
 const SMALL_TILE_WITHOUT_BORDER = {
   height: 20,
   width: 20,
+  borderStyle: 'none',
 };
 
 const SMALL_TILE_WITH_BORDER = {
   height: 12,
   width: 12,
+  borderStyle: 'solid',
   borderWidth: 4,
 };
 
