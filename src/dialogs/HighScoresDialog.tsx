@@ -20,6 +20,7 @@ import useGameModeStore from "../stores/gameModeStore";
 import Filter4Icon from '@mui/icons-material/Filter4';
 import Filter5Icon from '@mui/icons-material/Filter5';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import moment from "moment";
 
 /**
  * 
@@ -34,34 +35,33 @@ const HighScoreRow = ({
   index: number;
 }) => {
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "" }}>
+    <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'nowrap', gap: 3 }}>
       <DialogContentText
-        sx={{ display: "flex", flex: 1, color: colors.LIGHT }}
+        sx={{ display: "flex", color: colors.LIGHT }}
       >{`${index + 1}.`}</DialogContentText>
-      <DialogContentText sx={{ display: "flex", flex: 2, color: colors.LIGHT }}>
+      <DialogContentText sx={{ display: "flex", color: colors.LIGHT }}>
         {highScore.username}
       </DialogContentText>
       <DialogContentText
         sx={{
           display: "flex",
-          flex: 1,
+          justifyContent: "flex-end",
+          color: colors.LIGHT,
+        }}>
+        {highScore.score}
+      </DialogContentText>
+      <DialogContentText
+        sx={{
+          display: "flex",
           justifyContent: "flex-end",
           color: colors.LIGHT,
         }}
       >
-        {highScore.score}
+        {moment(highScore.timestamp.seconds, 'X').fromNow()}
       </DialogContentText>
     </Box>
   );
 };
-
-const HighScoresList = () => {
-  return (
-    <Box>
-
-    </Box>
-  )
-}
 
 /**
  * 
@@ -73,16 +73,22 @@ function HighScoresDialog() {
   const [gameModeTab, setGameModeTab] = useState<GameMode>(gameMode);
 
   useEffect(() => {
-    startFetchingHighScores();
-    fetchHighScores().then((highScores) => {
-      setHighScores(orderBy(highScores, ["score"], ["desc"]));
-    });
-  }, []);
+    if (showHighScoresDialog) {
+      startFetchingHighScores();
+      fetchHighScores().then((highScores) => {
+        setHighScores(orderBy(highScores, ["score"], ["desc"]));
+      });
+    }
+  }, [showHighScoresDialog]);
 
   useEffect(() => {
     setGameModeTab(gameMode);
   }, [gameMode]);
 
+  /**
+   * 
+   * @returns 
+   */
   const renderHighScoresList = () => {
     const scores = highScores.filter((hs) => hs.gameMode === gameModeTab);
     if (scores.length === 0) {
@@ -95,7 +101,6 @@ function HighScoresDialog() {
         highScore={highScore}
         index={i}
       />))
-
   }
 
   return (
