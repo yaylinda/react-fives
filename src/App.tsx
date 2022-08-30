@@ -6,6 +6,9 @@ import {
   AppBar,
   Box,
   Button,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
   ThemeProvider,
   Toolbar,
   Typography,
@@ -20,12 +23,15 @@ import HighScoresDialog from "./dialogs/HighScoresDialog";
 import PostHighScoreDialog from "./dialogs/PostHighScoreDialog";
 import useGameModeStore from "./stores/gameModeStore";
 import NewGameModeSelectionDialog from "./dialogs/NewGameModeSelectionDialog";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import { BOARD_WIDTH } from "./styles";
 
 const ANIMATION_DURATION = 100;
 
 function App() {
-  const { move, restoreState } = useGameStore();
+  const { hasStarted, isGameOver, move, restoreState } = useGameStore();
   const { init: initUserStore } = useUserStore();
   const { init: initHighScoresStore, openHighScoresDialog } = useHighScoresStore();
   const { gameMode, init: initModeStore, openNewGameModeSelectionDialog } = useGameModeStore();
@@ -85,8 +91,11 @@ function App() {
 
   // TODO - use variable mapping for colors/values of tiles
 
-  return (
-    <ThemeProvider theme={theme}>
+  /**
+   * Header Componet
+   */
+  const renderHeader = () => {
+    return (
       <AppBar position="static" sx={{ color: colors.LIGHT }}>
         <Toolbar variant="dense">
           <Typography sx={{ fontSize: 30, textAlign: "center", flexGrow: 1 }}>
@@ -94,7 +103,40 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Game />
+    );
+  }
+
+  /**
+   * Rendered as buttons before/after a game.
+   * Rendered as FAB during a game.
+   */
+  const renderActions = () => {
+    if (hasStarted && !isGameOver) {
+      return (<Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
+        <SpeedDial
+          ariaLabel="game-actions"
+          sx={{ position: 'absolute', bottom: 40, right: 40, '.MuiSpeedDial-fab': { backgroundColor: colors.ACCENT }}}
+          icon={<KeyboardArrowUpIcon />}
+        >
+          <SpeedDialAction
+            key="newGame"
+            icon={<FiberNewIcon />}
+            tooltipTitle="New Game"
+            onClick={openNewGameModeSelectionDialog}
+            sx={{ color: colors.LIGHT }}
+          />
+          <SpeedDialAction
+            key="highScores"
+            icon={<LeaderboardIcon />}
+            tooltipTitle="See High Scores"
+            onClick={openHighScoresDialog}
+            sx={{ color: colors.LIGHT }}
+          />
+        </SpeedDial>
+      </Box>);
+    }
+
+    return (
       <Box
         sx={{
           display: "flex",
@@ -111,6 +153,11 @@ function App() {
           <Typography>Show high scores</Typography>
         </Button>
       </Box>
+    );
+  };
+
+  const renderFooter = () => {
+    return (
       <Box
         sx={{
           backgroundColor: colors.DARK,
@@ -123,10 +170,17 @@ function App() {
           width: "100%",
         }}
       >
-        <Typography
-          fontSize={10}
-        >{`© ${moment().year()} YayLinda Inc.`}</Typography>
+        <Typography fontSize={10}>{`© ${moment().year()} YayLinda Inc.`}</Typography>
       </Box>
+    );
+  }
+
+  return (
+    <ThemeProvider theme={theme}>
+      {renderHeader()}
+      <Game />
+      {renderActions()}
+      {renderFooter()}
       <GameOverDialog />
       <HighScoresDialog />
       <PostHighScoreDialog />

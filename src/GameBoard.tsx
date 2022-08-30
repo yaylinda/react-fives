@@ -5,7 +5,7 @@ import { colors } from "./theme";
 import Tile from "./Tile";
 import { getBoardConfig } from './utils/utils';
 
-function Board() {
+function GameBoard() {
   const { tileLocations } = useGameStore();
   const { gameMode } = useGameModeStore();
   const { numRows, numCols, tileSize, tileSpacing } = getBoardConfig(gameMode);
@@ -45,4 +45,4 @@ function Board() {
   );
 }
 
-export default Board;
+export default GameBoard;
