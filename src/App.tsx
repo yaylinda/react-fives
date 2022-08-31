@@ -112,10 +112,10 @@ function App() {
    */
   const renderActions = () => {
     if (hasStarted && !isGameOver) {
-      return (<Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
+      return (
         <SpeedDial
           ariaLabel="game-actions"
-          sx={{ position: 'absolute', bottom: 40, right: 40, '.MuiSpeedDial-fab': { backgroundColor: colors.ACCENT }}}
+          sx={{ position: 'absolute', bottom: 50, right: 20, }}
           icon={<KeyboardArrowUpIcon />}
         >
           <SpeedDialAction
@@ -133,7 +133,7 @@ function App() {
             sx={{ color: colors.LIGHT }}
           />
         </SpeedDial>
-      </Box>);
+      );
     }
 
     return (
