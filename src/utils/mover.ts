@@ -36,8 +36,10 @@ export const moveTiles = (
 
           if (canCombine(cellValue, leftCellValue)) {
             intermediateBoard[row][col - 1].tiles.push({ ...cellValue });
+            if (board[row][col].value) {
+              movedRows.push(row);
+            }
             board[row][col].value = 0;
-            movedRows.push(row);
           } else {
             intermediateBoard[row][col].tiles.push({ ...cellValue });
           }
@@ -60,8 +62,10 @@ export const moveTiles = (
 
           if (canCombine(cellValue, rightCellValue)) {
             intermediateBoard[row][col + 1].tiles.push({ ...cellValue });
+            if (board[row][col].value) {
+              movedRows.push(row);
+            }
             board[row][col].value = 0;
-            movedRows.push(row);
           } else {
             intermediateBoard[row][col].tiles.push({ ...cellValue });
           }
@@ -82,8 +86,10 @@ export const moveTiles = (
 
           if (canCombine(cellValue, upCellValue)) {
             intermediateBoard[row - 1][col].tiles.push({ ...cellValue });
+            if (board[row][col].value) {
+              movedCols.push(col);
+            }
             board[row][col].value = 0;
-            movedCols.push(col);
           } else {
             intermediateBoard[row][col].tiles.push({ ...cellValue });
           }
@@ -106,8 +112,10 @@ export const moveTiles = (
 
           if (canCombine(cellValue, downCellValue)) {
             intermediateBoard[row + 1][col].tiles.push({ ...cellValue });
+            if (board[row][col].value) {
+              movedCols.push(col);
+            }
             board[row][col].value = 0;
-            movedCols.push(col);
           } else {
             intermediateBoard[row][col].tiles.push({ ...cellValue });
           }
