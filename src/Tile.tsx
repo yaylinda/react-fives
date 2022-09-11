@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import theme, { colors } from "./theme";
 import { SystemStyleObject } from "@mui/system";
 import { useEffect, useMemo, useState } from "react";
-import { STARTING_NUMS, START_NUM_2, START_NUM_3 } from "./utils/constants";
+import { MERGABLES, STARTING_NUMS, START_NUM_2, START_NUM_3 } from "./utils/constants";
 import useGameModeStore from "./stores/gameModeStore";
 import { getBoardConfig } from "./utils/utils";
 
@@ -152,7 +152,7 @@ function Tile({ tile, coordinates }: TileProps) {
         STYLES[`tile_${value}`],
         getTileSize(isStartingNum, config),
         {
-          zIndex: isNew ? 0 : value,
+          zIndex: isNew ? 0 : MERGABLES.indexOf(value),
           position: "absolute",
           top,
           left,

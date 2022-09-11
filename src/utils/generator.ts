@@ -23,7 +23,7 @@ export const generateTileValue = (
 
   // Decide if we want to randomly return one of the other values
   const numMerges = sum(Object.values(merged));
-  if (Math.random() <= numMerges / 2 / moves) {
+  if (Math.random() <= numMerges / 5 / moves) {
     if (Math.random() <= 0.5) {
       return randomStartingNum(generated);
     }
