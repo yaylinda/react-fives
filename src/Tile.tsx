@@ -145,6 +145,13 @@ function Tile({ tile, coordinates }: TileProps) {
 
   // TODO - fix animation when moving down or right
 
+  const getTileZIndex = () => {
+    if (STARTING_NUMS.includes(value)) {
+      return 1;
+    }
+    return MERGABLES.indexOf(value) + 2;
+  };
+
   return (
     <Box
       sx={[
@@ -152,7 +159,7 @@ function Tile({ tile, coordinates }: TileProps) {
         STYLES[`tile_${value}`],
         getTileSize(isStartingNum, config),
         {
-          zIndex: isNew ? 0 : MERGABLES.indexOf(value),
+          zIndex: isNew ? 0 : getTileZIndex(),
           position: "absolute",
           top,
           left,
