@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import GameBoard from "./GameBoard";
 import GameButtons from "./GameButtons";
 import GameStatsBar from "./GameStatsBar";
-import { colors } from "./theme";
+import { colors } from "../theme";
 
 /**
  *

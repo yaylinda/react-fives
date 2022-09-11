@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
-import useGameStore from "./stores/gameStore";
-import { colors } from "./theme";
-import { MoveDirection } from "./types";
+import useGameStore from "../stores/gameStore";
+import { colors } from "../theme";
+import { MoveDirection } from "../types";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";

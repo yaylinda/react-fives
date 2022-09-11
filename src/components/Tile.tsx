@@ -1,11 +1,11 @@
-import { Coordinates, GameBoardConfig, TileData } from "./types";
+import { Coordinates, GameBoardConfig, TileData } from "../types";
 import { Box } from "@mui/material";
-import theme, { colors } from "./theme";
+import theme, { colors } from "../theme";
 import { SystemStyleObject } from "@mui/system";
 import { useEffect, useMemo, useState } from "react";
-import { MERGABLES, STARTING_NUMS, START_NUM_2, START_NUM_3 } from "./utils/constants";
-import useGameModeStore from "./stores/gameModeStore";
-import { getBoardConfig } from "./utils/utils";
+import { MERGABLES, STARTING_NUMS, START_NUM_2, START_NUM_3 } from "../utils/constants";
+import useGameModeStore from "../stores/gameModeStore";
+import { getBoardConfig } from "../utils/utils";
 
 /**
  * Font sizes

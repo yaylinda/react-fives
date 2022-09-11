@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
-import useGameModeStore from "./stores/gameModeStore";
-import useGameStore from "./stores/gameStore";
-import { colors } from "./theme";
+import useGameModeStore from "../stores/gameModeStore";
+import useGameStore from "../stores/gameStore";
+import { colors } from "../theme";
 import Tile from "./Tile";
-import { getBoardConfig } from './utils/utils';
+import { getBoardConfig } from '../utils/utils';
 
 function GameBoard() {
   const { tileLocations } = useGameStore();

@@ -109,6 +109,7 @@ const useGameStore = create<GameState>()((set, get) => ({
         nextValue: usedNextValue
           ? generateTileValue(state.merged, state.generated, moves)
           : state.nextValue,
+        lastMoveDirection: dir,
       };
       window.localStorage.setItem(
         LOCAL_STORAGE_GAME_STATE,

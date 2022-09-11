@@ -13,7 +13,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import Game from "./Game";
+import Game from "./components/Game";
 import GameOverDialog from "./dialogs/GameOverDialog";
 import theme, { colors } from "./theme";
 import useUserStore from "./stores/userStore";

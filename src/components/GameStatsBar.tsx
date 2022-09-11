@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import useGameStore from "./stores/gameStore";
+import useGameStore from "../stores/gameStore";
 import { PreviewTile } from "./Tile";
 
 function GameStatsBar() {
